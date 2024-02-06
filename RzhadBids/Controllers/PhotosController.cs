@@ -1,55 +1,75 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using RzhadBids.DTO;
+using RzhadBids.Models;
+using RzhadBids.Services;
 
 namespace RzhadBids.Controllers
 {
 
     [Route("/photos")]
-    public class PhotosController : Controller
+    public class PhotosController : DbController
     {
+        IPhotoUploadService photoStorageService;
+        IConfiguration configuration;
+
+        public PhotosController(IPhotoUploadService photoStorageService,
+            IConfiguration configuration, DatabaseContext databaseContext) : base(databaseContext)
+        {
+            this.photoStorageService = photoStorageService;
+            this.configuration = configuration;
+        }
+
         [HttpGet]
         public IActionResult Upload()
         {
-            return Ok();
+            return View();
         }
 
-        /*[HttpPost("/photos")]
-        public ActionResult Upload(HttpPostedFileBase file)
+        [HttpPost]
+        public async Task<IActionResult> Upload(LotDTO formData)
         {
-            if (file != null && file.ContentLength > 0)
-            {
-                try
-                {
-                    // Уникальное имя файла
-                    string fileName = Path.GetFileName(Guid.NewGuid().ToString() + "_" + file.FileName);
 
-                    // Путь к папке, в которую сохраняются изображения
-                    string uploadPath = Server.MapPath("~/Uploads");
 
-                    // Если папка не существует, создаем ее
-                    if (!Directory.Exists(uploadPath))
-                    {
-                        Directory.CreateDirectory(uploadPath);
-                    }
-
-                    // Полный путь к файлу на сервере
-                    string filePath = Path.Combine(uploadPath, fileName);
-
-                    // Сохраняем файл на сервере
-                    file.SaveAs(filePath);
-
-                    ViewBag.Message = "Файл успешно загружен.";
-                }
-                catch (Exception ex)
-                {
-                    ViewBag.Error = "Произошла ошибка при загрузке файла: " + ex.Message;
-                }
-            }
-            else
+            if (formData.Photos.IsNullOrEmpty())
             {
                 ViewBag.Error = "Файл не выбран.";
+                return View();
+            }
+
+            var lot = new Lot
+            {
+                Title = formData.Title,
+                CategoryId = formData.CategoryId,
+                DateStart = DateTime.Now,
+                DateEnd = DateTime.UtcNow.AddDays(1),
+                StartingPrice = formData.StartingPrice,
+                Description = formData.Description
+            };
+
+            databaseContext.Lots.Add(lot);
+            try
+            {
+                foreach (var photo in formData.Photos)
+                {
+                    using (var stream = photo.OpenReadStream())
+                    {
+                        await photoStorageService.UploadBlobAsync(photo.FileName, stream);
+                        string? baseUrl = configuration["AzureBaseUrl"];
+                        lot.LotPhotos.Add(new LotPhoto { Lot = lot, Url = baseUrl + photo.FileName });
+                    }
+                }
+
+                ViewBag.Message = "Файл успешно загружен.";
+                await databaseContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Произошла ошибка при загрузке файла: " + ex.Message;
             }
 
             return View();
-        }*/
+        }
     }
 }

@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Upload Photo";
+}
+
+<h2>Upload Photo</h2>
+
+<form method="post" action="/photos" enctype="multipart/form-data">
+    <div>
+        <label for="title">Название:</label>
+        <input type="text" id="title" name="Title" required>
+    </div>
+    <div>
+        <label for="description">Описание:</label>
+        <textarea id="description" name="Description"></textarea>
+    </div>
+    <div>
+        <label for="categoryId">ID категории:</label>
+        <input type="number" id="categoryId" name="CategoryId" required>
+    </div>
+    <div>
+        <label for="startingPrice">Начальная цена:</label>
+        <input type="number" id="startingPrice" name="StartingPrice" step="0.01" required>
+    </div>
+    <div>
+        <label for="dateStart">Дата начала:</label>
+        <input type="datetime-local" id="dateStart" name="DateStart" required>
+    </div>
+    <div>
+        <label for="dateEnd">Дата окончания:</label>
+        <input type="datetime-local" id="dateEnd" name="DateEnd" required>
+    </div>
+    <div>
+        <label for="chatId">ID чата:</label>
+        <input type="number" id="chatId" name="ChatId">
+    </div>
+    <div>
+        <label for="photos">Фотографии:</label>
+        <input type="file" id="photos" name="Photos" multiple>
+    </div>
+    <button type="submit">Создать лот</button>
+        <div>
+        @if (!string.IsNullOrEmpty(ViewBag.Message))
+        {
+                <div class="alert alert-success">@ViewBag.Message</div>
+        }
+        else if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+    </div>
+</form>

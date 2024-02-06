@@ -6,13 +6,11 @@ namespace RzhadBids.Controllers
 {
     [ApiController]
     [Route("/api/categories")]
-    public class CategoriesContoller : Controller
+    public class CategoriesContoller : DbController
     {
-        private DatabaseContext databaseContext;
 
-        public CategoriesContoller(DatabaseContext databaseContext)
+        public CategoriesContoller(DatabaseContext databaseContext) : base(databaseContext)
         {
-            this.databaseContext = databaseContext;
         }
 
         [HttpPost("create")]

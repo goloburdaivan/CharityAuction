@@ -11,7 +11,7 @@
         public DateTime DateEnd { get; set; }
         public int? ChatId { get; set; }
         public Chat? Chat { get; set; }
-        public List<LotPhoto> Photos { get; set; } = new List<LotPhoto>();
+        public List<LotPhoto> LotPhotos { get; set; } = new List<LotPhoto>();
         public List<Bid> Bids { get; set; } = new List<Bid>();
     }
 }
