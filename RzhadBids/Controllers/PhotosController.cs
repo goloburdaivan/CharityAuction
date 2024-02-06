@@ -1,18 +1,21 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using RzhadBids.DTO;
 using RzhadBids.Models;
 using RzhadBids.Services;
+using RzhadBids.ViewModels;
 
 namespace RzhadBids.Controllers
 {
 
     [Route("/photos")]
+    [Authorize]
     public class PhotosController : DbController
     {
-        IPhotoUploadService photoStorageService;
-        IConfiguration configuration;
+        readonly IPhotoUploadService photoStorageService;
+        readonly IConfiguration configuration;
 
         public PhotosController(IPhotoUploadService photoStorageService,
             IConfiguration configuration, DatabaseContext databaseContext) : base(databaseContext)
@@ -24,7 +27,12 @@ namespace RzhadBids.Controllers
         [HttpGet]
         public IActionResult Upload()
         {
-            return View();
+            var categoriesModel = new LotCreateViewModel
+            {
+                Categories = this.databaseContext.Categories
+            };
+
+            return View(categoriesModel);
         }
 
         [HttpPost]
@@ -53,12 +61,10 @@ namespace RzhadBids.Controllers
             {
                 foreach (var photo in formData.Photos)
                 {
-                    using (var stream = photo.OpenReadStream())
-                    {
-                        await photoStorageService.UploadBlobAsync(photo.FileName, stream);
-                        string? baseUrl = configuration["AzureBaseUrl"];
-                        lot.LotPhotos.Add(new LotPhoto { Lot = lot, Url = baseUrl + photo.FileName });
-                    }
+                    using var stream = photo.OpenReadStream();
+                    await photoStorageService.UploadBlobAsync(photo.FileName, stream);
+                    string? baseUrl = configuration["AzureBaseUrl"];
+                    lot.LotPhotos.Add(new LotPhoto { Lot = lot, Url = baseUrl + photo.FileName });
                 }
 
                 ViewBag.Message = "Файл успешно загружен.";

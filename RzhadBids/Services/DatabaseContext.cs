@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using RzhadBids.Auth;
 using RzhadBids.Configuration;
 using RzhadBids.Models;
 
 namespace RzhadBids.Services
 {
-    public class DatabaseContext : DbContext
+    public class DatabaseContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<User> Users { get; set; } = null!;
         public DbSet<Bid> Bids { get; set; } = null!;
         public DbSet<Lot> Lots { get; set; } = null!;
         public DbSet<Message> Messages { get; set; } = null!;
@@ -20,6 +21,7 @@ namespace RzhadBids.Services
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new LotConfig());
         }

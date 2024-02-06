@@ -1,4 +1,6 @@
-﻿@{
+﻿
+@model RzhadBids.ViewModels.LotCreateViewModel
+@{
     ViewBag.Title = "Upload Photo";
 }
 
@@ -15,23 +17,16 @@
     </div>
     <div>
         <label for="categoryId">ID категории:</label>
-        <input type="number" id="categoryId" name="CategoryId" required>
+        <select id="categoryId" name="CategoryId" required>
+            @foreach(var item in Model.Categories)
+            {
+                <option value="@item.Id">@item.Title</option>
+            }
+        </select>
     </div>
     <div>
         <label for="startingPrice">Начальная цена:</label>
         <input type="number" id="startingPrice" name="StartingPrice" step="0.01" required>
-    </div>
-    <div>
-        <label for="dateStart">Дата начала:</label>
-        <input type="datetime-local" id="dateStart" name="DateStart" required>
-    </div>
-    <div>
-        <label for="dateEnd">Дата окончания:</label>
-        <input type="datetime-local" id="dateEnd" name="DateEnd" required>
-    </div>
-    <div>
-        <label for="chatId">ID чата:</label>
-        <input type="number" id="chatId" name="ChatId">
     </div>
     <div>
         <label for="photos">Фотографии:</label>
