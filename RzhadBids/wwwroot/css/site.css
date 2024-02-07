@@ -1,22 +1,82 @@
-html {
-  font-size: 14px;
-}
+@import "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css";
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+html {
+    font-size: 20px;
+    scroll-behavior: smooth;
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 50px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    min-width: 90%;
+}
+
+.navbar-brand {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 26px;
+    margin-left: auto;
+    margin-right: 40px;
+}
+
+.navbar-nav .nav-item {
+    margin-right: 30px;
+}
+
+.navbar-brand .rzhad {
+    color: #258cfb;
+}
+
+.navbar-brand .bids {
+    color: #ffc107;
+}
+
+.navbar-nav li {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 22px;
+    color: yellow;
+}
+
+.navbar-nav {
+    width: 100%;
+}
+
+.nav-item-log {
+    margin-left: auto;
+    margin-right: 30px;
+}
+
+@media (max-width: 1080px) {
+    .navbar-brand {
+        font-size: 18px;
+        margin-right: 10px;
+        margin-left: 0px;
+    }
+
+    .navbar-toggler {
+        display: block;
+    }
+
+    .navbar-collapse {
+        display: none;
+    }
+
+    .navbar-toggler.collapsed + .navbar-collapse {
+        display: block;
+    }
+
+
+
 }
