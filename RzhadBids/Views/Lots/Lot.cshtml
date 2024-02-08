@@ -1,0 +1,136 @@
+﻿@model RzhadBids.ViewModels.LotViewModel;
+@{
+    ViewData["Title"] = "Сторінка товару";
+    int minimalBid = Model.Lot.Bids.OrderByDescending(x => x.Sum).FirstOrDefault()?.Sum ?? Model.Lot.StartingPrice;
+    minimalBid += 10;
+    bool isLastBid = Model.Lot.Bids.OrderBy(bid => bid.Id).Last().User.Email == Model.User.Email;
+    bool isAuthenticated = User.Identity.IsAuthenticated;
+}
+<div class="loader" id="loader"></div>
+<div class="hidden" id="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="product-gallery">
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+
+                      @foreach (var photo in Model.Lot.LotPhotos.Select((value, index) => new { Index = index, Value = value }))
+                        {
+                            string active = photo.Index == 0 ? "active" : "";
+                            <div class="carousel-item @active">
+                                <img src="@photo.Value.Url" class="d-block w-100" alt="Product Photo">
+                            </div>
+                        }
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="text-center">
+                <h2>Інформація</h2>
+                <p>Категорія: @Model.Lot.Category.Title</p>
+                <p>Дата створення лоту: @Model.Lot.DateStart</p>
+                <p>Дата закінчення лоту: @Model.Lot.DateEnd</p>
+                <p>Початкова ціна: @Model.Lot.StartingPrice грн. </p>
+                <p>Найбільша ставка: @{
+                        var maxBid = Model.Lot.Bids.OrderByDescending(bid => bid.Sum).FirstOrDefault();
+                        string bidText = "";
+                        if (maxBid != null)
+                        {
+                            bidText = $"{maxBid.Sum} грн.";
+                        }
+
+                        if (bidText == string.Empty)
+                        {
+                            <p style="color: red">Ставок ще не зроблено! Будьте першим!</p>
+                        } else
+                        {
+                            <p style="color: green">@bidText</p>
+                        }
+                    }</p>
+                @if (isAuthenticated && !isLastBid)
+                {
+                    <form action="/lot/@Model.Lot.Id" method="post">
+                        <div class="form-group">
+                            <label for="bidAmount">Сума ставки:</label>
+                            <input type="number" min="@minimalBid" value="@minimalBid" name="Sum" class="form-control" id="bidAmount" placeholder="Сума ставки">
+                        </div>
+                        <button type="submit" class="bid-button">Сделать ставку</button>
+                    </form>
+                } else
+                {
+                    @if (!isAuthenticated)
+                    {
+                         <p style="color: red">Перед тим як зробити ставку, вам треба 
+                             <a href="/register">Зареєструватися</a>/<a href="/login">Увійти</a>
+                         </p>
+                    } else if (isLastBid)
+                    {
+                         <p style="color: red">Ваша ставка є останньою. Слідкуйте за історію ставок</p>                        
+                    }
+
+                }
+            </div>
+        </div>
+    </div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="true">Чат</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="false">Описание</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="bid-history-tab" data-toggle="tab" href="#bid-history" role="tab" aria-controls="bid-history" aria-selected="false">История ставок</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+        </div>
+        <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
+            <p>@Model.Lot.Description</p>
+        </div>
+        <div class="tab-pane fade" id="bid-history" role="tabpanel" aria-labelledby="bid-history-tab">
+            @if (Model.Lot.Bids.Count == 0)
+            {
+                <p id="no-bids" style="color: red">Ставок ще не зроблено! Будьте першим!</p>
+            } else
+            {
+                @foreach (var bid in Model.Lot.Bids.OrderByDescending(x => x.Sum))
+                {
+                    <p style="color: green">@bid.User.Email - @bid.Sum грн.</p>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/auctionHub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        connection.start().then(function () {
+            console.log("SignalR Connected.");
+            connection.on("ReceiveBidUpdate", function (message) {
+                $("#no-bids").remove();
+                if ($("#bids-history p").length === 0) {
+                    $("#bids-history").append("<p id='no-bids' style='color: red'>Ставок ще не зроблено! Будьте першим!</p>");
+                }
+                $("#bid-history").prepend(`<p style="color: green">${message.user.userName} - ${message.sum} грн.</p>`);
+            });
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+    </script>
+}

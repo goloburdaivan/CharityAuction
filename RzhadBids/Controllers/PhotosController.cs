@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using RzhadBids.Auth;
 using RzhadBids.DTO;
 using RzhadBids.Models;
 using RzhadBids.Services;
@@ -14,16 +11,13 @@ namespace RzhadBids.Controllers
 
     [Route("/photos")]
     [Authorize]
-    public class PhotosController : DbController
+    public class PhotosController : BaseController
     {
         readonly IPhotoUploadService photoStorageService;
         readonly IConfiguration configuration;
 
         [FromServices]
         public ThumbnailGenerator ThumbnailGenerator { get; set; }
-        [FromServices]
-        public UserManager<ApplicationUser> UserManager { get; set; }
-
         public PhotosController(IPhotoUploadService photoStorageService,
             IConfiguration configuration, DatabaseContext databaseContext) : base(databaseContext)
         {
@@ -36,7 +30,7 @@ namespace RzhadBids.Controllers
         {
             var categoriesModel = new LotCreateViewModel
             {
-                Categories = this.databaseContext.Categories
+                Categories = databaseContext.Categories
             };
 
             return View(categoriesModel);
@@ -45,8 +39,6 @@ namespace RzhadBids.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(LotDTO formData)
         {
-
-
             if (formData.Photos.IsNullOrEmpty())
             {
                 ViewBag.Error = "Файл не выбран.";
@@ -87,7 +79,7 @@ namespace RzhadBids.Controllers
 
             var categoriesModel = new LotCreateViewModel
             {
-                Categories = this.databaseContext.Categories
+                Categories = databaseContext.Categories
             };
 
             return View(categoriesModel);

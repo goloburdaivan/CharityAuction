@@ -202,8 +202,31 @@ body {
     background: #fc5a5a;
 }
 
+.row {
+    margin: 50px;
+}
+
+.col-md-6 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 @media screen and (max-width: 994px) {
     .grid-container {
         grid-template-columns: 1fr; /* Отображаем по одной карточке в ряду */
     }
 }
+
+.product-gallery .carousel {
+    width: 300px;
+    height: 270px; /* Фиксированная высота для карусели */
+    overflow: hidden; /* Скрытие изображений, выходящих за пределы карусели */
+}
+
+    .product-gallery .carousel .carousel-item img {
+        width: 300px;
+        height: 270px;
+        width: auto;
+        margin: 0 auto; /* Центрирование изображений по горизонтали */
+    }
