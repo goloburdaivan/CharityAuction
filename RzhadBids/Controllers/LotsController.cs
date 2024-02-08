@@ -42,6 +42,11 @@ namespace RzhadBids.Controllers
                 .FirstOrDefault();
 
             var user = await UserManager.GetUserAsync(User);
+            var messages = await databaseContext.Messages.Where(message => message.ChatId == lot.ChatId)
+                .Include(message => message.User)
+                .ToListAsync();
+
+            Console.WriteLine(messages.Count);
 
             if (lot == null)
             {
@@ -57,7 +62,8 @@ namespace RzhadBids.Controllers
             LotViewModel model = new()
             {
                 Lot = lot,
-                User = user
+                User = user,
+                Messages = messages
             };
 
             return View(model);

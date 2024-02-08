@@ -8,7 +8,6 @@ namespace RzhadBids.Models
         public int Sum { get; set; }
         public DateTime TimeStamp { get; set; }
         public int LotId { get; set; }
-        public int UserId { get; set; }
         public Lot Lot { get; set; }
         public ApplicationUser User { get; set; }
     }

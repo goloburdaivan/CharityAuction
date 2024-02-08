@@ -3,7 +3,7 @@
     ViewData["Title"] = "Сторінка товару";
     int minimalBid = Model.Lot.Bids.OrderByDescending(x => x.Sum).FirstOrDefault()?.Sum ?? Model.Lot.StartingPrice;
     minimalBid += 10;
-    bool isLastBid = Model.Lot.Bids.OrderBy(bid => bid.Id).Last().User.Email == Model.User.Email;
+    bool isLastBid = Model.Lot.Bids.OrderBy(bid => bid.Id).LastOrDefault()?.User.Email == Model.User.Email;
     bool isAuthenticated = User.Identity.IsAuthenticated;
 }
 <div class="loader" id="loader"></div>
@@ -94,6 +94,20 @@
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+              <div class="chat-container">
+                <div class="chat-box" id="chat-box">
+                    @foreach (var message in Model.Messages)
+                    {
+                       <div class="message @(message.User.Id == Model.User.Id ? "sent" : "received")">
+                          <p>@message.Text</p>
+                       </div>
+                    }
+                </div>
+                <form id="messageForm">
+                    <input type="text" id="message-input" placeholder="Введите сообщение...">
+                    <input type="submit" id="send-button" value="Отправить" />
+                </form>
+              </div>
         </div>
         <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
             <p>@Model.Lot.Description</p>
@@ -129,8 +143,51 @@
                 }
                 $("#bid-history").prepend(`<p style="color: green">${message.user.userName} - ${message.sum} грн.</p>`);
             });
+            connection.on("ReceiveChatUpdate", function (message) {
+                console.log(message);
+                const userId = "@Model.User.Id";
+                const status = userId == message.user.id ? "sent" : "received";
+                $("#chat-box").prepend(`
+                    <div class="message ${status}">
+                        <p>${message.text}</p>
+                    </div>  
+                `);
+            });
         }).catch(function (err) {
             return console.error(err.toString());
+        });
+
+        $("#messageForm").on("submit", (event) => {
+          event.preventDefault();
+
+          const messageText = $("#message-input").val();
+          console.log(messageText);
+
+          const message = {
+            Text: messageText,
+            TimeStamp: "@DateTime.UtcNow.ToString("o")",
+            ChatId: @Model.Lot.ChatId,
+          };
+
+          if (!messageText.trim()) {
+            alert("Введите сообщение");
+            return;
+          }
+
+          $.ajax({
+            url: "/api/chat/sendMessage",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(message),
+            success: function (response) {
+              console.log("Сообщение успешно отправлено:", response);
+              $("#message-input").val("");
+            },
+            error: function (xhr, status, error) {
+              console.log(error);
+              console.error("Произошла ошибка:", error);
+            },
+          });
         });
     </script>
 }

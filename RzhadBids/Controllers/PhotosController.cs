@@ -53,6 +53,7 @@ namespace RzhadBids.Controllers
             };
 
             await databaseContext.Chats.AddAsync(chat);
+            await databaseContext.SaveChangesAsync();
 
             var lot = new Lot
             {
@@ -63,7 +64,7 @@ namespace RzhadBids.Controllers
                 StartingPrice = formData.StartingPrice,
                 Description = formData.Description,
                 User = currentUser,
-                Chat = chat
+                ChatId = chat.Id
             };
 
             await databaseContext.Lots.AddAsync(lot);

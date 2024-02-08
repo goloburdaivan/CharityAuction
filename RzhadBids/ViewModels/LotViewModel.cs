@@ -7,5 +7,6 @@ namespace RzhadBids.ViewModels
     {
         public Lot Lot { get; set; } = null!;
         public ApplicationUser User { get; set; } = null!;
+        public List<Message> Messages { get; set; } = new List<Message>();
     }
 }
