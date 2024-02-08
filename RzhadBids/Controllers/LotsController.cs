@@ -16,7 +16,9 @@ namespace RzhadBids.Controllers
         public IActionResult Index(int? page)
         {
             int pageNumber = page ?? 1;
-            var lots = databaseContext.Lots.Include(l => l.LotPhotos).ToPagedList(pageNumber, PageSize);
+            var lots = databaseContext.Lots.Include(l => l.LotPhotos)
+                .Include(u => u.User)
+                .ToPagedList(pageNumber, PageSize);
             return View(lots);
         }
     }

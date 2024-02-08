@@ -1,4 +1,6 @@
-﻿namespace RzhadBids.Models
+﻿using RzhadBids.Auth;
+
+namespace RzhadBids.Models
 {
     public class Bid
     {
@@ -8,6 +10,6 @@
         public int LotId { get; set; }
         public int UserId { get; set; }
         public Lot Lot { get; set; }
-        public User User { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }

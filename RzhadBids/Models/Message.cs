@@ -1,4 +1,6 @@
-﻿namespace RzhadBids.Models
+﻿using RzhadBids.Auth;
+
+namespace RzhadBids.Models
 {
     public class Message
     {
@@ -7,7 +9,7 @@
         public DateTime TimeStamp { get; set; }
         public int UserId { get; set; }
         public int ChatId { get; set; }
-        public User User { get; set; } 
+        public ApplicationUser User { get; set; } 
         public Chat Chat { get; set; }
     }
 }

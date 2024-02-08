@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RzhadBids.Auth;
 using RzhadBids.DTO;
 using RzhadBids.Models;
 using RzhadBids.Services;
@@ -18,7 +20,9 @@ namespace RzhadBids.Controllers
         readonly IConfiguration configuration;
 
         [FromServices]
-        public ThumbnailGenerator thumbnailGenerator { get; set; }
+        public ThumbnailGenerator ThumbnailGenerator { get; set; }
+        [FromServices]
+        public UserManager<ApplicationUser> UserManager { get; set; }
 
         public PhotosController(IPhotoUploadService photoStorageService,
             IConfiguration configuration, DatabaseContext databaseContext) : base(databaseContext)
@@ -49,6 +53,7 @@ namespace RzhadBids.Controllers
                 return View();
             }
 
+            var currentUser = await UserManager.GetUserAsync(User);
             var lot = new Lot
             {
                 Title = formData.Title,
@@ -56,7 +61,8 @@ namespace RzhadBids.Controllers
                 DateStart = DateTime.Now,
                 DateEnd = DateTime.UtcNow.AddDays(1),
                 StartingPrice = formData.StartingPrice,
-                Description = formData.Description
+                Description = formData.Description,
+                User = currentUser
             };
 
             databaseContext.Lots.Add(lot);
@@ -64,7 +70,7 @@ namespace RzhadBids.Controllers
             {
                 foreach (var photo in formData.Photos)
                 {
-                    var stream = thumbnailGenerator.GenerateThumbnail(photo);
+                    var stream = ThumbnailGenerator.GenerateThumbnail(photo);
                     await photoStorageService.UploadBlobAsync(photo.FileName, stream);
                     string? baseUrl = configuration["AzureBaseUrl"];
                     lot.LotPhotos.Add(new LotPhoto { Lot = lot, Url = baseUrl + photo.FileName });

@@ -1,8 +1,6 @@
 ﻿@model X.PagedList.IPagedList<RzhadBids.Models.Lot>
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
-
 @{
     ViewData["Title"] = "Всі лоти";
 }
@@ -17,6 +15,7 @@
           <div class="product-list">
             <h3>@lot.Title</h3>
               <span class="price">Найвища ставка: ₴ @Math.Round(lot.StartingPrice, 1)</span>
+              <span class="price">Бенефіціар: @lot.User.UserName</span>
               <a href="" class="button">Зробити ставку</a>
           </div>
         </div>
