@@ -78,12 +78,14 @@ namespace RzhadBids.Controllers
                 return BadRequest(new { Error = "You need to login before sending smth." });
             }
 
-            ApplicationUser lastBidUser =
+            ApplicationUser? lastBidUser =
+                databaseContext.Bids.Any() ?
                 databaseContext.Bids.Include(bid => bid.User)
                 .OrderBy(bid => bid.Id)
-                .Last().User;
+                .Last().User
+                : null;
 
-            if (lastBidUser.Id == currentUser.Id)
+            if (lastBidUser != null && lastBidUser.Id == currentUser.Id)
             {
                 return BadRequest(new { Error = "You already made a bid" });
             }
