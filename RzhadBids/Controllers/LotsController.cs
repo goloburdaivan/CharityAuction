@@ -76,11 +76,6 @@ namespace RzhadBids.Controllers
                 databaseContext.Bids.Include(bid => bid.User)
                 .OrderBy(bid => bid.Id)
                 .Last().User;
-                                            
-
-
-            await Console.Out.WriteLineAsync(lastBidUser.Id);
-            await Console.Out.WriteLineAsync(currentUser.Id);
 
             if (lastBidUser.Id == currentUser.Id)
             {

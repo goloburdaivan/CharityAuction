@@ -46,6 +46,14 @@ namespace RzhadBids.Controllers
             }
 
             var currentUser = await UserManager.GetUserAsync(User);
+
+            var chat = new Chat
+            {
+                Title = $"Чат лоту - {formData.Title}"
+            };
+
+            await databaseContext.Chats.AddAsync(chat);
+
             var lot = new Lot
             {
                 Title = formData.Title,
@@ -54,10 +62,12 @@ namespace RzhadBids.Controllers
                 DateEnd = DateTime.UtcNow.AddDays(1),
                 StartingPrice = formData.StartingPrice,
                 Description = formData.Description,
-                User = currentUser
+                User = currentUser,
+                Chat = chat
             };
 
-            databaseContext.Lots.Add(lot);
+            await databaseContext.Lots.AddAsync(lot);
+
             try
             {
                 foreach (var photo in formData.Photos)
