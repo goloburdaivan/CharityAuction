@@ -1,0 +1,31 @@
+﻿@model X.PagedList.IPagedList<RzhadBids.Models.Lot>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewData["Title"] = "Всі лоти";
+}
+
+<div id="loader" class="loader"></div>
+<div id="content" class="grid-container hidden">
+    @foreach (var lot in Model.ToList())
+    {
+
+        <div class="product-item">
+          <img width="330" height="270" src="@lot.LotPhotos.First().Url">
+          <div class="product-list">
+            <h3>@lot.Title</h3>
+              <span class="price">Найвища ставка: ₴ @Math.Round(lot.StartingPrice, 1)</span>
+              <a href="" class="button">Зробити ставку</a>
+          </div>
+        </div>
+    }
+</div>
+@if(Model.PageCount > 1)
+{
+    <div class="pagedList">
+        @Html.PagedListPager(Model, page => Url.Action("Index", "Lots",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    </div>    
+}

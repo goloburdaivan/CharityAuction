@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RzhadBids.Auth;
-using RzhadBids.DTO;
 using RzhadBids.Services;
 using RzhadBids.ViewModels;
 

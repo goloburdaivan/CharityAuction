@@ -1,3 +1,6 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
+﻿document.addEventListener("DOMContentLoaded", function() {
+  setTimeout(function() {
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("content").classList.remove("hidden");
+  }, 2000);
+});

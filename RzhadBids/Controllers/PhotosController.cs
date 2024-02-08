@@ -17,6 +17,9 @@ namespace RzhadBids.Controllers
         readonly IPhotoUploadService photoStorageService;
         readonly IConfiguration configuration;
 
+        [FromServices]
+        public ThumbnailGenerator thumbnailGenerator { get; set; }
+
         public PhotosController(IPhotoUploadService photoStorageService,
             IConfiguration configuration, DatabaseContext databaseContext) : base(databaseContext)
         {
@@ -61,10 +64,11 @@ namespace RzhadBids.Controllers
             {
                 foreach (var photo in formData.Photos)
                 {
-                    using var stream = photo.OpenReadStream();
+                    var stream = thumbnailGenerator.GenerateThumbnail(photo);
                     await photoStorageService.UploadBlobAsync(photo.FileName, stream);
                     string? baseUrl = configuration["AzureBaseUrl"];
                     lot.LotPhotos.Add(new LotPhoto { Lot = lot, Url = baseUrl + photo.FileName });
+                    stream.Close();
                 }
 
                 ViewBag.Message = "Файл успешно загружен.";
@@ -75,7 +79,12 @@ namespace RzhadBids.Controllers
                 ViewBag.Error = "Произошла ошибка при загрузке файла: " + ex.Message;
             }
 
-            return View();
+            var categoriesModel = new LotCreateViewModel
+            {
+                Categories = this.databaseContext.Categories
+            };
+
+            return View(categoriesModel);
         }
     }
 }

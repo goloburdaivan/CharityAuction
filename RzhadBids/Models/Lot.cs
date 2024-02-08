@@ -1,4 +1,6 @@
-﻿namespace RzhadBids.Models
+﻿using RzhadBids.Auth;
+
+namespace RzhadBids.Models
 {
     public class Lot
     {
@@ -8,6 +10,7 @@
         public int CategoryId { get; set; }
         public decimal StartingPrice { get; set; } 
         public DateTime DateStart { get; set; }
+        public ApplicationUser User { get; set; }
         public DateTime DateEnd { get; set; }
         public int? ChatId { get; set; }
         public Chat? Chat { get; set; }

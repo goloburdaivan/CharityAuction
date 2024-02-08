@@ -22,6 +22,7 @@ body {
     align-items: center;
     align-self: center;
     min-width: 90%;
+    justify-content: center;
 }
 
 .navbar-brand {
@@ -76,7 +77,133 @@ body {
     .navbar-toggler.collapsed + .navbar-collapse {
         display: block;
     }
+}
 
+.pagedList {
+    display: flex;
+    justify-content: center;
+}
 
+    .pagedList a {
+        padding: 5px 10px;
+        margin: 0 2px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        color: #333;
+        text-decoration: none;
+    }
 
+        .pagedList a:hover {
+            background-color: #ddd;
+        }
+
+    .pagedList .pagedList-selected {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+.card-deck {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    gap: 10px;
+    max-width: 800px; 
+    margin: 0 auto;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* ћинимальна€ ширина блока 300px, остальное равномерно распредел€етс€ */
+    justify-items: center; /* ¬ыравнивание по центру по горизонтали */
+    gap: 20px; /* –ассто€ние между блоками */
+    max-width: 1200px; /* ћаксимальна€ ширина контейнера */
+    margin: 0 auto; /* ÷ентрирование контейнера на странице */
+}
+
+.loader {
+    border: 8px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 8px solid #3498db;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -25px;
+    margin-left: -25px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.product-item {
+    width: 300px;
+    text-align: center;
+    margin: 20px;
+    border-bottom: 2px solid #F5F5F5;
+    background: white;
+    font-family: "Open Sans";
+    transition: .3s ease-in;
+}
+
+    .product-item:hover {
+        border-bottom: 2px solid #fc5a5a;
+    }
+
+    .product-item img {
+        display: block;
+        width: 100%;
+    }
+
+.product-list {
+    background: #fafafa;
+    padding: 15px 0;
+}
+
+    .product-list h3 {
+        font-size: 18px;
+        font-weight: 400;
+        color: #444444;
+        margin: 0 0 10px 0;
+    }
+
+.price {
+    font-size: 16px;
+    color: #fc5a5a;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.button {
+    text-decoration: none;
+    display: inline-block;
+    padding: 0 12px;
+    background: #cccccc;
+    color: white;
+    text-transform: uppercase;
+    font-size: 12px;
+    line-height: 28px;
+    transition: .3s ease-in;
+}
+
+.product-item:hover .button {
+    background: #fc5a5a;
+}
+
+@media screen and (max-width: 994px) {
+    .grid-container {
+        grid-template-columns: 1fr; /* ќтображаем по одной карточке в р€ду */
+    }
 }
