@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.SqlServer.Server;
 using RzhadBids.Auth;
 using RzhadBids.DTO;
+using RzhadBids.Filtering;
 using RzhadBids.Models;
 using RzhadBids.Services;
 using RzhadBids.ViewModels;
@@ -35,13 +35,36 @@ namespace RzhadBids.Controllers
         }
 
         [HttpGet("/lots")]
-        public IActionResult Index(int? page)
+        public IActionResult Index(int? page, bool? active, FiltersDTO filters)
         {
             int pageNumber = page ?? 1;
-            var lots = databaseContext.Lots.Include(l => l.LotPhotos)
-                .Include(u => u.User)
-                .ToPagedList(pageNumber, PageSize);
-            return View(lots);
+            IQueryable<Lot> lots = databaseContext.Lots
+                .Include(l => l.LotPhotos)
+                .Include(l => l.Bids)
+                .Include(u => u.User);
+
+            if (active.HasValue && active.Value)
+            {
+                lots = lots.Where(lot => lot.DateEnd > DateTime.UtcNow);
+            }
+
+            var strategies = new List<IFilterStrategy>
+            {
+                FilterStrategyFactory.GetFilterStrategy(FilterType.Category),
+                FilterStrategyFactory.GetFilterStrategy(FilterType.Date),
+                FilterStrategyFactory.GetFilterStrategy(FilterType.Price),
+                FilterStrategyFactory.GetFilterStrategy(FilterType.Activity)
+            };
+
+            foreach (var strategy in strategies)
+            {
+                lots = strategy.ApplyFilter(lots, filters);
+            }
+
+            ViewBag.Categories = databaseContext.Categories.ToList();
+            ViewBag.Filters = filters;
+
+            return View(lots.ToPagedList());
         }
 
         [HttpGet("/lot/{id:int}")]

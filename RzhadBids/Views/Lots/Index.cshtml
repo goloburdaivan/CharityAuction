@@ -5,24 +5,98 @@
     ViewData["Title"] = "Всі лоти";
 }
 <div id="loader" class="loader"></div>
-<div id="content" class="grid-container hidden">
-    @foreach (var lot in Model.ToList())
-    {
-        <div class="product-item">
-          <img width="330" height="270" src="@lot.LotPhotos.Last().Url">
-          <div class="product-list">
-            <h3>@lot.Title</h3>
-              <span class="price">Найвища ставка: ₴ @lot.StartingPrice</span>
-              <span class="price">Бенефіціар: @lot.User.UserName</span>
-              <a href="/lot/@lot.Id" class="button">Зробити ставку</a>
-          </div>
+<div id="content" class="row hidden">
+    <div class="col-md-3 filters">
+        <div>
+            <div class="filter-title"><h4>Фильтры</h4></div>
+            <form action="/lots" method="get">
+                <div class="mb-3">
+                    <label for="filterCategory">Категорії:</label>
+                    <div>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            bool isChecked = false;
+                            if (ViewBag.Filters != null && ViewBag.Filters.FilterCategories != null)
+                            {
+                                isChecked = Array.IndexOf(ViewBag.Filters.FilterCategories, category.Id.ToString()) != -1;
+                            }
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="category-@category.Id" name="FilterCategories" 
+                                value="@category.Id" @(isChecked ? "checked" : "")>
+                                <label class="form-check-label" for="category-@category.Id">
+                                    @category.Title
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <label>Цена:</label>
+                    <input type="number" name="MinPrice" class="form-control" placeholder="Минимальная цена" value="@ViewBag.Filters?.MinPrice">
+                    <input type="number" name="MaxPrice" class="form-control" placeholder="Максимальная цена" value="@ViewBag.Filters?.MaxPrice">
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <label>Дата:</label>
+                    <br />
+                    <label>Дата начала аукциона:</label>
+                    <input type="date" name="StartDate" class="form-control" placeholder="Начальная дата" value="@((ViewBag.Filters.StartDate != null ? ViewBag.Filters.StartDate.ToString("yyyy-MM-dd") : string.Empty))">
+
+                    <label>Дата окончания аукциона:</label>
+                    <input type="date" name="EndDate" class="form-control"  placeholder="Конечная дата" value="@((ViewBag.Filters.EndDate != null ? ViewBag.Filters.EndDate.ToString("yyyy-MM-dd") : string.Empty))">
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <label>Активність:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="Actual" @(ViewBag.Filters?.Actual != null ? "checked" : "")>
+                        <label class="form-check-label" for="active">Актуальні</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="Unactual" @(ViewBag.Filters?.Unactual != null ? "checked" : "")>
+                        <label class="form-check-label" for="active">Неактуальні</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="MaxBids" @(ViewBag.Filters?.MaxBids != null ? "checked" : "")>
+                        <label class="form-check-label" for="active">Найбільша активність</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Применить фильтры</button>
+            </form>
         </div>
-    }
+    </div>
+    <div class="col-md-9">
+        <div class="grid-container">
+            @foreach (var lot in Model.ToList())
+            {
+                    <div class="product-item">
+                        <img width="330" height="270" src="@lot.LotPhotos.Last().Url">
+                        <div class="product-list">
+                            <h3>@lot.Title</h3>
+                            <span class="price">Найвища ставка: 
+                            @if (lot.Bids.Count > 0)
+                            {
+                               <span>₴ @lot.Bids.OrderByDescending(lot => lot.Sum).First().Sum</span>
+                            } else
+                            {
+                               <span>Відсутня</span>
+                            }
+                        </span>
+                            <span class="price">Початкова ціна: ₴ @lot.StartingPrice</span>
+                            <span class="price">Бенефіціар: @lot.User.Name @lot.User.Surname</span>
+                            <a href="/lot/@lot.Id" class="button">Зробити ставку</a>
+                        </div>
+                    </div>
+            }
+        </div>
+        @if (Model.PageCount > 1)
+        {
+                <div class="pagedList">
+                @Html.PagedListPager(Model, page => Url.Action("Index", "Lots",
+                new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                </div>    
+        }
+    </div>
 </div>
-@if(Model.PageCount > 1)
-{
-    <div class="pagedList">
-        @Html.PagedListPager(Model, page => Url.Action("Index", "Lots",
-        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
-    </div>    
-}
+

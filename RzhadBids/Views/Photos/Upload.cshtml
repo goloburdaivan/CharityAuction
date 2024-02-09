@@ -17,12 +17,7 @@
     </div>
     <div>
         <label for="categoryId">ID категории:</label>
-        <select id="categoryId" name="CategoryId" required>
-            @foreach(var item in Model.Categories)
-            {
-                <option value="@item.Id">@item.Title</option>
-            }
-        </select>
+        @Html.DropDownList("CategoryId", new SelectList(Model.Categories, "Id", "Title"), "-- Выберите категорию --", new { @class = "form-control", required = "required" })
     </div>
     <div>
         <label for="startingPrice">Начальная цена:</label>

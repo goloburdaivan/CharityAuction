@@ -17,19 +17,7 @@
         </div>
         <div class="mb-3">
             <label for="categoryId" class="form-label">ID категории:</label>
-            <select id="categoryId" name="CategoryId" class="form-select" required>
-                @foreach (var item in Model.Categories)
-                {
-                    if (item.Id == Model.Lot.Category.Id)
-                    {
-                        <option value="@item.Id" selected>@item.Title</option>
-                    }
-                    else
-                    {
-                        <option value="@item.Id">@item.Title</option>
-                    }
-                }
-            </select>
+            @Html.DropDownList("CategoryId", new SelectList(Model.Categories, "Id", "Title", Model.Lot.Category.Id), new { @class = "form-select", required = "required" })
         </div>
         <div class="mb-3">
             <label for="startingPrice" class="form-label">Начальная цена:</label>

@@ -181,7 +181,6 @@ body {
     .product-list h3 {
         font-size: 20px;
         font-weight: 600;
-        color: Black;
         margin: 0 0 10px 0;
     }
 
@@ -189,7 +188,6 @@ body {
     font-size: 20px;
     font-family: 'Nunito', sans-serif;
     font-weight: 600;
-    color: Black;
     display: block;
     margin-bottom: 12px;
 }
@@ -307,4 +305,36 @@ button {
 .photos-block {
     justify-content: center;
     margin: 20px;
+}
+
+p {
+    color: white;
+}
+
+h1 {
+    color: white;
+}
+
+h2 {
+    color: white;
+}
+
+label {
+    color: white;
+}
+.received p {
+    color: black;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    color: white;
+}
+.filter-title {
+    text-align: center;
+}
+
+.mb-3 * {
+   margin-bottom: 10px;
 }
