@@ -212,11 +212,11 @@ namespace RzhadBids.Controllers
                     stream.Close();
                 }
 
-                ViewBag.Message = "Файл успешно загружен.";
+                ViewBag.Message = "Файл успішно завантажено.";
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Произошла ошибка при загрузке файла: " + ex.Message;
+                ViewBag.Error = "Виникла помилка при завантаженні файлу: " + ex.Message;
             }
 
             databaseContext.Update(lot);
