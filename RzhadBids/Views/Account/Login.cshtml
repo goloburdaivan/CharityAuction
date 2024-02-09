@@ -3,18 +3,18 @@
 <form action="/login" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div>
-        <label asp-for="Email">Email:</label>
+        <label asp-for="Email">Електронна пошта:</label>
         <input asp-for="Email" />
         <span asp-validation-for="Email"></span>
     </div>
     <div>
-        <label asp-for="Password">Password:</label>
+        <label asp-for="Password">Пароль:</label>
         <input asp-for="Password" />
         <span asp-validation-for="Password"></span>
     </div>
     <div>
-        <label asp-for="RememberMe">Remember me:</label>
+        <label asp-for="RememberMe">Запам'ятати мене':</label>
         <input asp-for="RememberMe" />
     </div>
-    <button type="submit">Login</button>
+    <button type="submit">Увійти</button>
 </form>

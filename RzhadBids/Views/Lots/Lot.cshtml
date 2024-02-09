@@ -58,7 +58,7 @@
 
                         if (bidText == string.Empty)
                         {
-                            <p style="color: red">Ставок ще не зроблено! Будьте першим!</p>
+                            <p style="color: red">Ставок ще не зроблено! Будьте першими!</p>
                         } else
                         {
                             <p style="color: green">@bidText</p>
@@ -77,12 +77,12 @@
                 {
                     if (!isAuthenticated)
                     {
-                         <p style="color: red">Перед тим як зробити ставку, вам треба 
+                         <p style="color: red">Перед тим, як зробити ставку, вам треба 
                              <a href="/register">Зареєструватися</a>/<a href="/login">Увійти</a>
                          </p>
                     } else if (isLastBid && now <= Model.Lot.DateEnd)
                     {
-                        <p style="color: red">Ваша ставка є останньою. Слідкуйте за історію ставок!</p>
+                        <p style="color: red">Ваша ставка є останньою. Слідкуйте за історією ставок!</p>
                     } else if (now > Model.Lot.DateEnd)
                     {
                         ApplicationUser? winner = null;
@@ -121,8 +121,8 @@
                     }
                 </div>
                 <form id="messageForm">
-                    <input type="text" id="message-input" placeholder="Введите сообщение...">
-                    <input type="submit" id="send-button" value="Отправить" />
+                    <input type="text" id="message-input" placeholder="Введіть повідомлення...">
+                    <input type="submit" id="send-button" value="Надіслати" />
                 </form>
               </div>
         </div>
@@ -132,7 +132,7 @@
         <div class="tab-pane fade" id="bid-history" role="tabpanel" aria-labelledby="bid-history-tab">
             @if (Model.Lot.Bids.Count == 0)
             {
-                <p id="no-bids" style="color: red">Ставок ще не зроблено! Будьте першим!</p>
+                <p id="no-bids" style="color: red">Ставок ще не зроблено! Будьте першими!</p>
             } else
             {
                 @foreach (var bid in Model.Lot.Bids.OrderByDescending(x => x.Sum))
@@ -155,7 +155,7 @@
             connection.on("ReceiveBidUpdate", function (message) {
                 $("#no-bids").remove();
                 if ($("#bids-history p").length === 0) {
-                    $("#bids-history").append("<p id='no-bids' style='color: red'>Ставок ще не зроблено! Будьте першим!</p>");
+                    $("#bids-history").append("<p id='no-bids' style='color: red'>Ставок ще не зроблено! Будьте першими!</p>");
                 }
                 $("#bid-history").prepend(`<p style="color: green">${message.user.userName} - ${message.sum} грн.</p>`);
             });
@@ -186,7 +186,7 @@
           };
 
           if (!messageText.trim()) {
-            alert("Введите сообщение");
+            alert("Введіть повідомлення");
             return;
           }
 
@@ -196,12 +196,12 @@
             contentType: "application/json",
             data: JSON.stringify(message),
             success: function (response) {
-              console.log("Сообщение успешно отправлено:", response);
+              console.log("Повідомлення успішно надіслано:", response);
               $("#message-input").val("");
             },
             error: function (xhr, status, error) {
               console.log(error);
-              console.error("Произошла ошибка:", error);
+              console.error("Виникла помилка:", error);
             },
           });
         });
