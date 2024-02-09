@@ -8,7 +8,7 @@
 <div id="content" class="row hidden">
     <div class="col-md-3 filters">
         <div>
-            <div class="filter-title"><h4>Фильтры</h4></div>
+            <div class="filter-title"><h4>Фільтри</h4></div>
             <form action="/lots" method="get">
                 <div class="mb-3">
                     <label for="filterCategory">Категорії:</label>
@@ -33,18 +33,18 @@
                 <hr>
                 <div class="mb-3">
                     <label>Цена:</label>
-                    <input type="number" name="MinPrice" class="form-control" placeholder="Минимальная цена" value="@ViewBag.Filters?.MinPrice">
-                    <input type="number" name="MaxPrice" class="form-control" placeholder="Максимальная цена" value="@ViewBag.Filters?.MaxPrice">
+                    <input type="number" name="MinPrice" class="form-control" placeholder="Мінімальна ціна" value="@ViewBag.Filters?.MinPrice">
+                    <input type="number" name="MaxPrice" class="form-control" placeholder="Максимальна ціна" value="@ViewBag.Filters?.MaxPrice">
                 </div>
                 <hr>
                 <div class="mb-3">
                     <label>Дата:</label>
                     <br />
-                    <label>Дата начала аукциона:</label>
-                    <input type="date" name="StartDate" class="form-control" placeholder="Начальная дата" value="@((ViewBag.Filters.StartDate != null ? ViewBag.Filters.StartDate.ToString("yyyy-MM-dd") : string.Empty))">
+                    <label>Дата початку аукціону:</label>
+                    <input type="date" name="StartDate" class="form-control" placeholder="Початкова дата" value="@((ViewBag.Filters.StartDate != null ? ViewBag.Filters.StartDate.ToString("yyyy-MM-dd") : string.Empty))">
 
-                    <label>Дата окончания аукциона:</label>
-                    <input type="date" name="EndDate" class="form-control"  placeholder="Конечная дата" value="@((ViewBag.Filters.EndDate != null ? ViewBag.Filters.EndDate.ToString("yyyy-MM-dd") : string.Empty))">
+                    <label>Дата завершення аукціону:</label>
+                    <input type="date" name="EndDate" class="form-control"  placeholder="Кінцева дата" value="@((ViewBag.Filters.EndDate != null ? ViewBag.Filters.EndDate.ToString("yyyy-MM-dd") : string.Empty))">
                 </div>
                 <hr>
                 <div class="mb-3">
@@ -62,7 +62,7 @@
                         <label class="form-check-label" for="active">Найбільша активність</label>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Применить фильтры</button>
+                <button type="submit" class="btn btn-primary">Примінити фільтри</button>
             </form>
         </div>
     </div>

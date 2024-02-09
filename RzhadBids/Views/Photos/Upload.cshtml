@@ -8,26 +8,26 @@
 
 <form method="post" action="/photos" enctype="multipart/form-data">
     <div>
-        <label for="title">Название:</label>
+        <label for="title">Назва:</label>
         <input type="text" id="title" name="Title" required>
     </div>
     <div>
-        <label for="description">Описание:</label>
+        <label for="description">Опис:</label>
         <textarea id="description" name="Description"></textarea>
     </div>
     <div>
-        <label for="categoryId">ID категории:</label>
+        <label for="categoryId">ID категорії:</label>
         @Html.DropDownList("CategoryId", new SelectList(Model.Categories, "Id", "Title"), "-- Выберите категорию --", new { @class = "form-control", required = "required" })
     </div>
     <div>
-        <label for="startingPrice">Начальная цена:</label>
+        <label for="startingPrice">Початкова ціна:</label>
         <input type="number" id="startingPrice" name="StartingPrice" step="0.1" required>
     </div>
     <div>
-        <label for="photos">Фотографии:</label>
+        <label for="photos">Фотографії:</label>
         <input type="file" id="photos" name="Photos" multiple>
     </div>
-    <button type="submit">Создать лот</button>
+    <button type="submit">Створити лот</button>
         <div>
         @if (!string.IsNullOrEmpty(ViewBag.Message))
         {

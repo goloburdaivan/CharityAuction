@@ -8,23 +8,23 @@
 <div class="container">
     <form method="post" action="/lot/@Model.Lot.Id/edit" enctype="multipart/form-data">
         <div class="mb-3">
-            <label for="title" class="form-label">Название:</label>
+            <label for="title" class="form-label">Назва:</label>
             <input type="text" value="@Model.Lot.Title" id="title" name="Title" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label for="description" class="form-label">Описание:</label>
+            <label for="description" class="form-label">Опис:</label>
             <textarea id="description" name="Description" class="form-control" rows="3">@Model.Lot.Description</textarea>
         </div>
         <div class="mb-3">
-            <label for="categoryId" class="form-label">ID категории:</label>
+            <label for="categoryId" class="form-label">ID категорії:</label>
             @Html.DropDownList("CategoryId", new SelectList(Model.Categories, "Id", "Title", Model.Lot.Category.Id), new { @class = "form-select", required = "required" })
         </div>
         <div class="mb-3">
-            <label for="startingPrice" class="form-label">Начальная цена:</label>
+            <label for="startingPrice" class="form-label">Стартова ціна:</label>
             <input type="number" id="startingPrice" value="@Model.Lot.StartingPrice" name="StartingPrice" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label for="photos" class="form-label">Фотографии:</label>
+            <label for="photos" class="form-label">Фотографії:</label>
             <input type="file" id="photos" name="Photos" class="form-control" multiple>
         </div>
 
@@ -38,7 +38,7 @@
                     </div>
             }
         </div>
-        <button type="submit" class="btn btn-primary">Создать лот</button>
+        <button type="submit" class="btn btn-primary">Створити лот</button>
         <div>
             @if (!string.IsNullOrEmpty(ViewBag.Message))
             {
