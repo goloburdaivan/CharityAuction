@@ -4,14 +4,12 @@
 @{
     ViewData["Title"] = "Всі лоти";
 }
-
 <div id="loader" class="loader"></div>
 <div id="content" class="grid-container hidden">
     @foreach (var lot in Model.ToList())
     {
-
         <div class="product-item">
-          <img width="330" height="270" src="@lot.LotPhotos.First().Url">
+          <img width="330" height="270" src="@lot.LotPhotos.Last().Url">
           <div class="product-list">
             <h3>@lot.Title</h3>
               <span class="price">Найвища ставка: ₴ @lot.StartingPrice</span>

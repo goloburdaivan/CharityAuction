@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.SqlServer.Server;
 using RzhadBids.Auth;
+using RzhadBids.DTO;
 using RzhadBids.Models;
 using RzhadBids.Services;
 using RzhadBids.ViewModels;
@@ -15,9 +18,20 @@ namespace RzhadBids.Controllers
         const int PageSize = 21;
         private readonly IHubContext<AuctionHub> hubContext;
 
+        [FromServices]
+        public ThumbnailGenerator ThumbnailGenerator { get; set; }
+
+        [FromServices]
+        public IPhotoUploadService PhotoUploadService { get; set; }
+
+        private readonly IConfiguration configuration;
+
         public LotsController(DatabaseContext databaseContext,
-            IHubContext<AuctionHub> hubContext) : base(databaseContext) {    
+            IHubContext<AuctionHub> hubContext,
+            IConfiguration configuration) : base(databaseContext)
+        {
             this.hubContext = hubContext;
+            this.configuration = configuration;
         }
 
         [HttpGet("/lots")]
@@ -46,8 +60,6 @@ namespace RzhadBids.Controllers
                 .Include(message => message.User)
                 .ToListAsync();
 
-            Console.WriteLine(messages.Count);
-
             if (lot == null)
             {
                 return BadRequest(new { Error = "Lot not found" });
@@ -55,9 +67,8 @@ namespace RzhadBids.Controllers
 
             if (user == null)
             {
-                return BadRequest(new {Error = "Not logged in"});
+                return BadRequest(new { Error = "Not logged in" });
             }
-
 
             LotViewModel model = new()
             {
@@ -103,6 +114,92 @@ namespace RzhadBids.Controllers
             await hubContext.Clients.All.SendAsync("ReceiveBidUpdate", bid);
 
             return Redirect($"/lot/{id}");
+        }
+
+        [HttpGet("/lot/{id:int}/edit")]
+        [Authorize]
+        public async Task<IActionResult> Edit(int id)
+        {
+            ApplicationUser? user = await UserManager.GetUserAsync(User);
+            var lot = await databaseContext.Lots
+                .Include(lot => lot.User)
+                .Include(lot => lot.Category)
+                .Include(lot => lot.LotPhotos)
+                .FirstOrDefaultAsync(lot => lot.Id == id);
+
+            var categories = await databaseContext.Categories.ToListAsync();
+
+            if (lot == null)
+            {
+                return BadRequest(new { Message = "Lot not found" });
+            }
+
+            if (user.Id != lot.User.Id)
+            {
+                return Forbid();
+            }
+
+            var model = new LotEditViewModel
+            {
+                Categories = categories,
+                Lot = lot
+            };
+
+            return View(model);
+        }
+
+        [HttpPost("/lot/{id:int}/edit")]
+        [Authorize]
+        public async Task<IActionResult> Edit(int id, LotDTO editedLot)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { Error = "Invalid lot model" });
+            }
+
+            var lot = await databaseContext.Lots
+                .Include(lot => lot.User)
+                .FirstOrDefaultAsync(lot => lot.Id == id);
+
+            var user = await UserManager.GetUserAsync(User);
+
+            if (lot == null)
+            {
+                return BadRequest(new { Error = "Lot not found" });
+            }
+
+            if (user.Id != lot.User.Id)
+            {
+                return Forbid();
+            }
+
+            lot.StartingPrice = editedLot.StartingPrice;
+            lot.Title = editedLot.Title;
+            lot.CategoryId = editedLot.CategoryId;
+            lot.Description = editedLot.Description;
+
+            try
+            {
+                foreach (var photo in editedLot.Photos)
+                {
+                    var stream = ThumbnailGenerator.GenerateThumbnail(photo);
+                    await PhotoUploadService.UploadBlobAsync(photo.FileName, stream);
+                    string? baseUrl = configuration["AzureBaseUrl"];
+                    lot.LotPhotos.Add(new LotPhoto { LotId = lot.Id, Url = baseUrl + photo.FileName });
+                    stream.Close();
+                }
+
+                ViewBag.Message = "Файл успешно загружен.";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Произошла ошибка при загрузке файла: " + ex.Message;
+            }
+
+            databaseContext.Update(lot);
+            await databaseContext.SaveChangesAsync();
+
+            return Redirect($"/lot/{id}/edit");
         }
     }
 }

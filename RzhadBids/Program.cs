@@ -38,6 +38,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromDays(30);
     options.LoginPath = "/login";
+    options.AccessDeniedPath = "/404";
     options.SlidingExpiration = true;
 });
 

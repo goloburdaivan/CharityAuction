@@ -287,4 +287,9 @@ button {
 
     button:hover {
         background-color: #0056b3;
-    }
+    }   
+
+.photos-block {
+    justify-content: center;
+    margin: 20px;
+}

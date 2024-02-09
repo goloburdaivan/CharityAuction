@@ -4,6 +4,15 @@ namespace RzhadBids.ViewModels
 {
     public class RegisterViewModel
     {
+
+        [Required(ErrorMessage = "Please enter a name.")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Name must be between 3 and 50 characters.")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Please enter a surname.")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Surname must be between 3 and 50 characters.")]
+        public string Surname { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

@@ -1,10 +1,13 @@
 ﻿@model RzhadBids.ViewModels.LotViewModel;
+@using RzhadBids.Auth;
 @{
     ViewData["Title"] = "Сторінка товару";
     int minimalBid = Model.Lot.Bids.OrderByDescending(x => x.Sum).FirstOrDefault()?.Sum ?? Model.Lot.StartingPrice;
     minimalBid += 10;
     bool isLastBid = Model.Lot.Bids.OrderBy(bid => bid.Id).LastOrDefault()?.User.Email == Model.User.Email;
     bool isAuthenticated = User.Identity.IsAuthenticated;
+    DateTime now = DateTime.UtcNow;
+    bool isCreator = Model.Lot.User.Id == Model.User.Id;
 }
 <div class="loader" id="loader"></div>
 <div class="hidden" id="content">
@@ -35,7 +38,12 @@
         </div>
         <div class="col-md-6">
             <div class="text-center">
-                <h2>Інформація</h2>
+                <h2>Інформація 
+                    @if (isCreator)
+                    {
+                        <span><a href="/lot/@Model.Lot.Id/edit">✎</a></span>    
+                    }
+                </h2>
                 <p>Категорія: @Model.Lot.Category.Title</p>
                 <p>Дата створення лоту: @Model.Lot.DateStart</p>
                 <p>Дата закінчення лоту: @Model.Lot.DateEnd</p>
@@ -56,7 +64,7 @@
                             <p style="color: green">@bidText</p>
                         }
                     }</p>
-                @if (isAuthenticated && !isLastBid)
+                @if (isAuthenticated && !isLastBid && now <= Model.Lot.DateEnd)
                 {
                     <form action="/lot/@Model.Lot.Id" method="post">
                         <div class="form-group">
@@ -67,16 +75,25 @@
                     </form>
                 } else
                 {
-                    @if (!isAuthenticated)
+                    if (!isAuthenticated)
                     {
                          <p style="color: red">Перед тим як зробити ставку, вам треба 
                              <a href="/register">Зареєструватися</a>/<a href="/login">Увійти</a>
                          </p>
-                    } else if (isLastBid)
+                    } else if (isLastBid && now <= Model.Lot.DateEnd)
                     {
-                         <p style="color: red">Ваша ставка є останньою. Слідкуйте за історію ставок</p>                        
-                    }
+                        <p style="color: red">Ваша ставка є останньою. Слідкуйте за історію ставок!</p>
+                    } else if (now > Model.Lot.DateEnd)
+                    {
+                        ApplicationUser? winner = null;
+                        if (Model.Lot.Bids.Count != 0)
+                        {
+                            winner = Model.Lot.Bids.OrderByDescending(bid => bid.Sum).Last().User;
+                        }
 
+                        <p style="color: red">Ставки на цей лот більше не приймаються!</p>
+                        <p style="color: blue">Переможець: @(winner != null ? winner.Name + " " + winner.Surname : "Ніхто не переміг")</p>
+                    }
                 }
             </div>
         </div>
@@ -135,7 +152,6 @@
             .build();
 
         connection.start().then(function () {
-            console.log("SignalR Connected.");
             connection.on("ReceiveBidUpdate", function (message) {
                 $("#no-bids").remove();
                 if ($("#bids-history p").length === 0) {

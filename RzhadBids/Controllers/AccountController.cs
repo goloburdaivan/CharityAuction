@@ -59,7 +59,12 @@ namespace RzhadBids.Controllers
                 return View(model);
             }
 
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser {
+                UserName = model.Email, Email = model.Email,
+                Name = model.Name,
+                Surname = model.Surname
+            };
+
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
@@ -76,6 +81,12 @@ namespace RzhadBids.Controllers
         private IActionResult RedirectIfLoggedIn()
         {
             return Redirect("/profile");
+        }
+
+        [HttpGet("/404")]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

@@ -76,7 +76,7 @@ namespace RzhadBids.Controllers
                     var stream = ThumbnailGenerator.GenerateThumbnail(photo);
                     await photoStorageService.UploadBlobAsync(photo.FileName, stream);
                     string? baseUrl = configuration["AzureBaseUrl"];
-                    lot.LotPhotos.Add(new LotPhoto { Lot = lot, Url = baseUrl + photo.FileName });
+                    lot.LotPhotos.Add(new LotPhoto { LotId = lot.Id, Url = baseUrl + photo.FileName });
                     stream.Close();
                 }
 

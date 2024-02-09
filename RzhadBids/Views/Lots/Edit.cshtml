@@ -1,0 +1,65 @@
+﻿@model RzhadBids.ViewModels.LotEditViewModel
+@{
+    ViewBag.Title = "Upload Photo";
+}
+
+<h2 class="text-center">Upload Photo</h2>
+
+<div class="container">
+    <form method="post" action="/lot/@Model.Lot.Id/edit" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="title" class="form-label">Название:</label>
+            <input type="text" value="@Model.Lot.Title" id="title" name="Title" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Описание:</label>
+            <textarea id="description" name="Description" class="form-control" rows="3">@Model.Lot.Description</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="categoryId" class="form-label">ID категории:</label>
+            <select id="categoryId" name="CategoryId" class="form-select" required>
+                @foreach (var item in Model.Categories)
+                {
+                    if (item.Id == Model.Lot.Category.Id)
+                    {
+                        <option value="@item.Id" selected>@item.Title</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Id">@item.Title</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="startingPrice" class="form-label">Начальная цена:</label>
+            <input type="number" id="startingPrice" value="@Model.Lot.StartingPrice" name="StartingPrice" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="photos" class="form-label">Фотографии:</label>
+            <input type="file" id="photos" name="Photos" class="form-control" multiple>
+        </div>
+
+        <div class="row mb-3 photos-block">
+            @foreach (var photo in Model.Lot.LotPhotos)
+            {
+                    <div class="col-2">
+                        <div class="position-relative d-inline-block">
+                            <img width="50" height="50" src="@photo.Url" class="mr-2 mb-2" />
+                        </div>
+                    </div>
+            }
+        </div>
+        <button type="submit" class="btn btn-primary">Создать лот</button>
+        <div>
+            @if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                    <div class="alert alert-success">@ViewBag.Message</div>
+            }
+            else if (!string.IsNullOrEmpty(ViewBag.Error))
+            {
+                    <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+        </div>
+    </form>
+</div>
