@@ -15,6 +15,7 @@ html {
 
 body {
     margin-bottom: 50px;
+    background-color: #181a2a;
 }
 
 .container {
@@ -62,8 +63,7 @@ body {
 @media (max-width: 1080px) {
     .navbar-brand {
         font-size: 18px;
-        margin-right: 10px;
-        margin-left: 0px;
+        margin-left: 10px;
     }
 
     .navbar-toggler {
@@ -72,6 +72,10 @@ body {
 
     .navbar-collapse {
         display: none;
+    }
+
+    .navbar-nav .nav-item {
+        margin-left: 10px;
     }
 
     .navbar-toggler.collapsed + .navbar-collapse {
@@ -87,15 +91,11 @@ body {
     .pagedList a {
         padding: 5px 10px;
         margin: 0 2px;
-        border: 1px solid #ccc;
+        border: 2px solid #ccc;
         background-color: #f9f9f9;
         color: #333;
         text-decoration: none;
     }
-
-        .pagedList a:hover {
-            background-color: #ddd;
-        }
 
     .pagedList .pagedList-selected {
         background-color: #007bff;
@@ -152,36 +152,44 @@ body {
     width: 300px;
     text-align: center;
     margin: 20px;
-    border-bottom: 2px solid #F5F5F5;
-    background: white;
+    border: 4px solid #808080;
+    background: #fff;
     font-family: "Open Sans";
     transition: .3s ease-in;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
     .product-item:hover {
-        border-bottom: 2px solid #fc5a5a;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); 
     }
 
     .product-item img {
         display: block;
         width: 100%;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
     }
+
 
 .product-list {
     background: #fafafa;
     padding: 15px 0;
+    border-radius: 0 0 12px 12px; 
 }
 
     .product-list h3 {
-        font-size: 18px;
-        font-weight: 400;
-        color: #444444;
+        font-size: 20px;
+        font-weight: 600;
+        color: Black;
         margin: 0 0 10px 0;
     }
 
 .price {
-    font-size: 16px;
-    color: #fc5a5a;
+    font-size: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    color: Black;
     display: block;
     margin-bottom: 12px;
 }
@@ -189,17 +197,24 @@ body {
 .button {
     text-decoration: none;
     display: inline-block;
-    padding: 0 12px;
-    background: #cccccc;
+    padding: 10px 20px;
+    background: #1E90FF;
     color: white;
     text-transform: uppercase;
-    font-size: 12px;
-    line-height: 28px;
+    font-size: 16px;
+    font-weight: 700;
+    border: 4px solid #ffd700;
+    border-radius: 20px;
     transition: .3s ease-in;
 }
 
 .product-item:hover .button {
-    background: #fc5a5a;
+    background: #ffd700;
+    color: #4169E1;
+}
+
+.product-list {
+    background-color: #4169E1;
 }
 
 .row {
@@ -214,7 +229,7 @@ body {
 
 @media screen and (max-width: 994px) {
     .grid-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; 
     }
 }
 
