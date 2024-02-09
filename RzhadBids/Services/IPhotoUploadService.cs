@@ -1,6 +1,4 @@
-﻿using Azure.Storage.Blobs;
-
-namespace RzhadBids.Services
+﻿namespace RzhadBids.Services
 {
     public interface IPhotoUploadService
     {

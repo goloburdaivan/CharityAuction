@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RzhadBids.Auth;
 using RzhadBids.Configuration;
 using RzhadBids.Models;
+using RzhadBids.Seeder;
 
 namespace RzhadBids.Services
 {
@@ -17,6 +18,7 @@ namespace RzhadBids.Services
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) {
             Database.EnsureCreated();
+            DatabaseSeeder.SeedData(this);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
