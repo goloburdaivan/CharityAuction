@@ -3,32 +3,35 @@
 @{
     ViewBag.Title = "Upload Photo";
 }
-
-<h2>Upload Photo</h2>
-
-<form method="post" action="/photos" enctype="multipart/form-data">
-    <div>
+<form method="post" action="/photos" enctype="multipart/form-data" class="form">
+    <div class="form-group">
         <label for="title">Назва:</label>
-        <input type="text" id="title" name="Title" required>
+        <input type="text" id="title" name="Title" class="form-control" required>
     </div>
-    <div>
+    <div class="form-group">
         <label for="description">Опис:</label>
-        <textarea id="description" name="Description"></textarea>
+        <textarea id="description" name="Description" class="form-control"></textarea>
     </div>
-    <div>
+    <div class="form-group">
         <label for="categoryId">ID категорії:</label>
-        @Html.DropDownList("CategoryId", new SelectList(Model.Categories, "Id", "Title"), "-- Виберіть категорію --", new { @class = "form-control", required = "required" })
+        <select id="categoryId" name="CategoryId" class="form-control" required>
+            <option value="">-- Виберіть категорію --</option>
+            @foreach (var category in Model.Categories)
+            {
+                    <option value="@category.Id">@category.Title</option>
+            }
+        </select>
     </div>
-    <div>
+    <div class="form-group">
         <label for="startingPrice">Початкова ціна:</label>
-        <input type="number" id="startingPrice" name="StartingPrice" step="0.1" required>
+        <input type="number" id="startingPrice" name="StartingPrice" step="0.1" class="form-control" required>
     </div>
-    <div>
+    <div class="form-group">
         <label for="photos">Фотографії:</label>
-        <input type="file" id="photos" name="Photos" multiple>
+        <input type="file" id="photos" name="Photos" class="form-control-file" multiple>
     </div>
-    <button type="submit">Створити лот</button>
-        <div>
+    <button type="submit" class="btn btn-primary">Створити лот</button>
+    <div>
         @if (!string.IsNullOrEmpty(ViewBag.Message))
         {
                 <div class="alert alert-success">@ViewBag.Message</div>
