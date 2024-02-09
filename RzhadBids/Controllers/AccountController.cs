@@ -6,16 +6,10 @@ using RzhadBids.ViewModels;
 
 namespace RzhadBids.Controllers
 {
-    public class AccountController : DbController
+    public class AccountController : BaseController
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager,
-            DatabaseContext context) : base(context)
+        public AccountController(DatabaseContext context) : base(context)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
         }
 
         [HttpGet("/login")]
@@ -27,26 +21,27 @@ namespace RzhadBids.Controllers
         [HttpPost("/login")]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View(model);
-                }
+                return View(model);
             }
-            return View(model);
+
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View(model);
+            }
         }
 
         [HttpPost("/logout")]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
+            await SignInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
@@ -59,21 +54,28 @@ namespace RzhadBids.Controllers
         [HttpPost("/register")]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
-                }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                return View(model);
+            }
+
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+            var result = await UserManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                await SignInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
             }
             return View(model);
+        }
+
+        private IActionResult RedirectIfLoggedIn()
+        {
+            return Redirect("/profile");
         }
     }
 }

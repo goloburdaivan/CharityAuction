@@ -113,11 +113,11 @@ body {
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* ћинимальна€ ширина блока 300px, остальное равномерно распредел€етс€ */
-    justify-items: center; /* ¬ыравнивание по центру по горизонтали */
-    gap: 20px; /* –ассто€ние между блоками */
-    max-width: 1200px; /* ћаксимальна€ ширина контейнера */
-    margin: 0 auto; /* ÷ентрирование контейнера на странице */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    justify-items: center;
+    gap: 20px;
+    max-width: 1200px; 
+    margin: 0 auto; 
 }
 
 .loader {
@@ -217,8 +217,89 @@ body {
     background-color: #4169E1;
 }
 
+.row {
+    margin: 50px;
+}
+
+.col-md-6 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 @media screen and (max-width: 994px) {
     .grid-container {
         grid-template-columns: 1fr; 
     }
 }
+
+.product-gallery .carousel {
+    width: 300px;
+    height: 270px;
+    overflow: hidden; 
+}
+
+    .product-gallery .carousel .carousel-item img {
+        width: 300px;
+        height: 270px;
+        width: auto;
+        margin: 0 auto;
+    }
+
+.chat-container {
+    max-width: 350px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.chat-box {
+    height: 500px;
+    overflow-y: auto;
+    padding: 5px; 
+}
+
+.message {
+    margin-bottom: 5px;
+    padding: 5px 8px;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.received {
+    width: 50%;
+    background-color: #f2f2f2;
+    height: auto;
+    word-wrap: break-word;
+}
+
+.sent {
+    width: 50%;
+    background-color: #0084ff;
+    height: auto;
+    word-wrap: break-word;
+    color: #fff;
+}
+
+input[type="text"] {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0084ff;
+    color: #fff;
+    cursor: pointer;
+    margin: 10px;
+}
+
+    button:hover {
+        background-color: #0056b3;
+    }

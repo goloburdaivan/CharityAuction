@@ -14,9 +14,9 @@
           <img width="330" height="270" src="@lot.LotPhotos.First().Url">
           <div class="product-list">
             <h3>@lot.Title</h3>
-              <span class="price">Найвища ставка: ₴ @Math.Round(lot.StartingPrice, 1)</span>
+              <span class="price">Найвища ставка: ₴ @lot.StartingPrice</span>
               <span class="price">Бенефіціар: @lot.User.UserName</span>
-              <a href="" class="button">Зробити ставку</a>
+              <a href="/lot/@lot.Id" class="button">Зробити ставку</a>
           </div>
         </div>
     }

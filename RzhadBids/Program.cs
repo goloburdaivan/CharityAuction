@@ -7,6 +7,7 @@ using RzhadBids.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddRazorPages();
+builder.Services.AddSignalR();
 string? connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(connection,
     ServerVersion.AutoDetect(connection)));
@@ -69,5 +70,10 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<AuctionHub>("/auctionHub");
+});
 
 app.Run();

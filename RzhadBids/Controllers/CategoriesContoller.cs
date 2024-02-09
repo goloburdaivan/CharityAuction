@@ -6,9 +6,8 @@ namespace RzhadBids.Controllers
 {
     [ApiController]
     [Route("/api/categories")]
-    public class CategoriesContoller : DbController
+    public class CategoriesContoller : BaseController
     {
-
         public CategoriesContoller(DatabaseContext databaseContext) : base(databaseContext)
         {
         }
@@ -16,8 +15,8 @@ namespace RzhadBids.Controllers
         [HttpPost("create")]
         public IActionResult Index([FromBody] Category category)
         {
-            this.databaseContext.Categories.Add(category);
-            this.databaseContext.SaveChanges();
+            databaseContext.Categories.Add(category);
+            databaseContext.SaveChanges();
 
             return Ok(category);
         }
