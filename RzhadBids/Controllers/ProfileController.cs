@@ -43,11 +43,6 @@ namespace RzhadBids.Controllers
 				return BadRequest(new { Message = "Lot not found" });
 			}
 
-			foreach (var u in databaseContext.Users)
-            {
-                //await Console.Out.WriteLineAsync(u.Id);
-            }
-
             return View(model);
         }
     }
