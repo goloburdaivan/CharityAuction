@@ -5,11 +5,13 @@ namespace RzhadBids.ViewModels
     public class LoginViewModel
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+		[EmailAddress(ErrorMessage = "Адреса електронної пошти не коректна")]
+		[Display(Name = "Електронна пошта")]
+		public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Пароль")]
         public string Password { get; set; }
 
         [Display(Name = "Remember me")]

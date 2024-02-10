@@ -3,27 +3,27 @@
 
  <div class="wrapper">
 	<div class="title">
-		Login Form
+		Форма для входу
 	</div>
 	<form action="/login" method="post">
 	<div class="field">
 		<input type="text" required name="Email">
 		<label asp-for="Email"></label>
-		<span asp-validation-for="Email" class="text-danger"></span>
 	</div>
+	<span asp-validation-for="Email" class="text-danger"></span>
 	<div class="field">
 		<input type="password" required name="Password">
 		<label asp-for="Password"></label>
-		<span asp-validation-for="Password" class="text-danger"></span>
 	</div>
+	<span asp-validation-for="Password" class="text-danger"></span>
 	 <div class="content">
 		<div class="checkbox">
-			<label asp-for="RememberMe">Запам'ятати мене: </label>
+			<label asp-for="RememberMe">Запам'ятати мене:&nbsp;</label>
 			<input asp-for="RememberMe" type="checkbox" id="remember-me"/>
 		</div>
 	</div>
 	<div class="field">
-		<input type="submit" value="Login">
+		<input type="submit" value="Увійти">
 	</div>
 	</form>
 </div> 
