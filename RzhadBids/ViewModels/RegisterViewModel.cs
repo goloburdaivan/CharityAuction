@@ -21,7 +21,7 @@ namespace RzhadBids.ViewModels
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "{0} має бути довжиною від {2} до {1} символів", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "{0} має бути довжиною від {2} до {1} символів", MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }

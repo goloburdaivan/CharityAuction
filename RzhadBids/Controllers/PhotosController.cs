@@ -41,7 +41,7 @@ namespace RzhadBids.Controllers
         {
             if (formData.Photos.IsNullOrEmpty())
             {
-                ViewBag.Error = "Файл не выбран.";
+                ViewBag.Error = "Файл не обрано.";
                 return View();
             }
 
@@ -80,12 +80,12 @@ namespace RzhadBids.Controllers
                     stream.Close();
                 }
 
-                ViewBag.Message = "Файл успешно загружен.";
+                ViewBag.Message = "Файл успішно завантажено";
                 await databaseContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Произошла ошибка при загрузке файла: " + ex.Message;
+                ViewBag.Error = "Виникла помилка при завантаженні файлу: " + ex.Message;
             }
 
             var categoriesModel = new LotCreateViewModel
