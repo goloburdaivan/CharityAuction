@@ -108,9 +108,15 @@ namespace RzhadBids.Controllers
                 return BadRequest(new { Error = "You need to login before sending smth." });
             }
 
+            var lot = databaseContext.Lots
+             .Where(lot => lot.Id == id)
+             .Include(lot => lot.Bids)
+             .ThenInclude(bid => bid.User)
+             .First();
+
             ApplicationUser? lastBidUser =
-                databaseContext.Bids.Any() ?
-                databaseContext.Bids.Include(bid => bid.User)
+                lot.Bids.Any() ?
+                lot.Bids
                 .OrderBy(bid => bid.Id)
                 .Last().User
                 : null;
