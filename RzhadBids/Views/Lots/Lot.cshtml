@@ -2,7 +2,7 @@
 @using RzhadBids.Auth;
 @{
     ViewData["Title"] = "Сторінка товару";
-    int minimalBid = Model.Lot.Bids.OrderByDescending(x => x.Sum).FirstOrDefault()?.Sum ?? Model.Lot.StartingPrice + 10;
+    int minimalBid = Model.Lot.Bids.OrderByDescending(x => x.Sum).FirstOrDefault()?.Sum ?? Model.Lot.StartingPrice;
     bool isLastBid = Model.Lot.Bids.LastOrDefault()?.User.Id == Model.User?.Id;
     bool isAuthenticated = User.Identity.IsAuthenticated;
     bool isCreator = Model.User?.Id == Model.Lot.User.Id;
@@ -68,7 +68,7 @@
                     <form action="/lot/@Model.Lot.Id" method="post">
                         <div class="form-group">
                             <label for="bidAmount">Сума ставки:</label>
-                            <input type="number" min="@minimalBid" value="@minimalBid" name="Sum" class="form-control" id="bidAmount" placeholder="Сума ставки">
+                             <input type="number" min="(@minimalBid+10)" value="(@minimalBid+10)" name="Sum" class="form-control" id="bidAmount" placeholder="Сума ставки">
                         </div>
                         <button type="submit" class="bid-button">Сделать ставку</button>
                     </form>
