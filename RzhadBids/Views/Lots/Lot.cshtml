@@ -2,29 +2,11 @@
 @using RzhadBids.Auth;
 @{
     ViewData["Title"] = "Сторінка товару";
-    int minimalBid = Model.Lot.Bids.OrderByDescending(x => x.Sum).FirstOrDefault()?.Sum ?? Model.Lot.StartingPrice;
-    minimalBid += 10;
-    bool isLastBid = false;
-
-    var lastBid = Model.Lot.Bids.OrderBy(bid => bid.Id).LastOrDefault();
-    if (lastBid == null)
-    {
-        isLastBid = false;
-    } else
-    {
-        isLastBid = lastBid?.User.Id == Model.User.Id;
-    }    
-
+    int minimalBid = Model.Lot.Bids.OrderByDescending(x => x.Sum).FirstOrDefault()?.Sum ?? Model.Lot.StartingPrice + 10;
+    bool isLastBid = Model.Lot.Bids.LastOrDefault()?.User.Id == Model.User?.Id;
     bool isAuthenticated = User.Identity.IsAuthenticated;
+    bool isCreator = Model.User?.Id == Model.Lot.User.Id;
     DateTime now = DateTime.UtcNow;
-    bool isCreator = false;
-    if (Model.User == null)
-    {
-        isCreator = false;
-    } else
-    {
-        isCreator = Model.User.Id == Model.Lot.User.Id;
-    }
 }
 <div class="loader" id="loader"></div>
 <div class="hidden" id="content">
@@ -128,20 +110,27 @@
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
-              <div class="chat-container">
-                <div class="chat-box" id="chat-box">
-                    @foreach (var message in Model.Messages)
-                    {
-                       <div class="message @(message.User.Id == Model.User.Id ? "sent" : "received")">
-                          <p>@message.Text</p>
-                       </div>
-                    }
-                </div>
-                <form id="messageForm">
-                    <input type="text" id="message-input" placeholder="Введіть повідомлення...">
-                    <input type="submit" id="send-button" value="Надіслати" />
-                </form>
-              </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                  <div class="chat-container">
+                    <div class="chat-box" id="chat-box">
+                            @foreach (var message in Model.Messages)
+                            {
+                                           <div class="message @(message.User.Id == Model.User.Id ? "sent" : "received")">
+                                              <p>@message.Text</p>
+                                           </div>
+                            }
+                    </div>
+                    <form id="messageForm">
+                        <input type="text" id="message-input" placeholder="Введіть повідомлення...">
+                        <input type="submit" id="send-button" value="Надіслати" />
+                    </form>
+                  </div>   
+            }
+            else
+            {
+                <span style="color: red">Спочатку увійдіть в акаунт</span>
+            }
         </div>
         <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
             <p>@Model.Lot.Description</p>
@@ -161,7 +150,7 @@
     </div>
 </div>
 
-@if (Model.User != null)
+@if (User.Identity.IsAuthenticated)
 {
     @section Scripts {
         <script>
