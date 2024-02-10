@@ -25,17 +25,24 @@ namespace RzhadBids.Controllers
         {
 
             var user = databaseContext.Users
+                .Include(user => user.Bids)
                 .Where(user => user.Id == id).FirstOrDefault();
             var lots = databaseContext.Lots
                 .Include(lot => lot.User)
                 .Include(lot => lot.Bids)
                 .Where(lot => lot.User.Id == id);
 
+            var winnedLots = databaseContext.Lots
+            .Include(lot => lot.Bids)
+            .Include(lot => lot.User)
+            .Where(lot => lot.User.Id == id && lot.DateEnd < DateTime.Now && lot.Bids.Any())
+            .GroupBy(lot => lot.Id);
+
             ProfileViewModel model = new()
             {
                 User = user,
-                Lots = lots.ToList()
-                
+                Lots = lots.ToList(),
+                WinnedLots = GetWinnedLots(id),
             };
 
 			if (lots == null)
@@ -44,6 +51,29 @@ namespace RzhadBids.Controllers
 			}
 
             return View(model);
+        }
+
+        private List<Lot> GetWinnedLots(string userId)
+        {
+            var wonLots = new List<Lot>();
+            var lots = databaseContext.Lots.Where(l => l.DateEnd < DateTime.Now)
+                        .Include(l => l.Bids)
+                        .ThenInclude(b => b.User);
+
+            foreach (var lot in lots)
+            {
+                var userBid = lot.Bids
+                    .Where(b => b.User.Id == userId)
+                    .OrderByDescending(b => b.Sum)
+                    .FirstOrDefault();
+
+                if (userBid != null && userBid.Sum == lot.Bids.Max(b => b.Sum))
+                {
+                    wonLots.Add(lot);
+                }
+            }
+
+            return wonLots;
         }
     }
 }

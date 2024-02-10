@@ -1,33 +1,76 @@
 ﻿@model RzhadBids.ViewModels.ProfileViewModel
 @{
 }
-<div class="conteiner">
-	<div class="text-center">
-		<h2>Особистий кабінет</h2>
-	</div>
-	<div>
-		<div class="col-md-6">
-			<div class="profileimg">
-
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="text-center">
-				<p>Ім'я': @Model.User.Name</p>
-				<p>Прізвище': @Model.User.Surname</p>
-				<p>Електронна пошта: @Model.User.Email</p>
-			</div>
-		</div>
-	</div>
-	<ul class="nav nav-tabs" id="myTab" role="tablist">
-		<li class="nav-item">
-			<a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="true">Мої лоти</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="false">Активні лоти</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" id="bid-history-tab" data-toggle="tab" href="#bid-history" role="tab" aria-controls="bid-history" aria-selected="false">Історія лотів</a>
-		</li>
-	</ul>
+<div id="content" class="mt-5">
+  <div class="row">
+    <div class="col-md-4 personal-page-image-block">
+      <img src="https://rzhadbid.blob.core.windows.net/rzhadbidimages/Char.png" alt="Фотография пользователя" class="img-fluid">
+    </div>
+    <div class="col-md-8 personal-page-text-block">
+        <h1>Інформація про користувача:</h1>
+       <table class="table">
+        <tbody>
+          <tr>
+            <th scope="row">Ім'я':</th>
+            <td>@Model.User.Name</td>
+          </tr>
+          <tr>
+            <th scope="row">Прізвище:</th>
+            <td>@Model.User.Surname</td>
+          </tr>
+          <tr>
+            <th scope="row">Контакти:</th>
+            <td>@Model.User.Email</td>
+          </tr>
+          <tr>
+            <th scope="row">Кількість створених лотів:</th>
+            <td>@Model.Lots.Count</td>
+          </tr>
+          <tr>
+            <th scope="row">Найбільша ставка:</th>
+            <td>@(Model.User.Bids.OrderByDescending(bid => bid.Sum).FirstOrDefault()?.Sum ?? 0)</td>
+          </tr>
+          <tr>
+            <th scope="row">Сума ставок за весь час:</th>
+            <td>@(Model.User.Bids.Sum(bid => bid.Sum))</td>
+          </tr>
+          <tr>
+            <th scope="row">Виграно лотів:</th>
+            <td>@(Model.WinnedLots.Count)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <ul class="nav nav-tabs mt-5" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="true">Лоти користувача</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="false">Виграні лоти</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="bid-history-tab" data-toggle="tab" href="#bid-history" role="tab" aria-controls="bid-history" aria-selected="false">Останні 10 ставок</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+            @foreach (var lot in Model.Lots)
+            {
+              <p><a href="/lot/@lot.Id">@lot.Title</a></p>
+            }
+        </div>
+    <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
+            @foreach (var lot in Model.WinnedLots)
+            {
+                  <p><a href="/lot/@lot.Id">@lot.Title</a></p>
+            }
+    </div>
+    <div class="tab-pane fade" id="bid-history" role="tabpanel" aria-labelledby="bid-history-tab">
+            @foreach (var bid in Model.User.Bids.OrderBy(bid => bid.TimeStamp).Take(10))
+            {
+                <p>@bid.Lot.Title - @bid.Sum</p>
+            }
+    </div>
+  </div>
 </div>

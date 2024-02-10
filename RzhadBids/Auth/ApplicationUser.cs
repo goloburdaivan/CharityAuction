@@ -13,6 +13,8 @@ namespace RzhadBids.Auth
         [JsonIgnore]
         public List<Lot> Lots { get; set; }
         [JsonIgnore]
+        public List<Bid> Bids { get; set; }
+        [JsonIgnore]
         public override string? PasswordHash { get => base.PasswordHash; set => base.PasswordHash = value; }
         [JsonIgnore]
         public override string? PhoneNumber { get => base.PhoneNumber; set => base.PhoneNumber = value; }

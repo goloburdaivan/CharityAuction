@@ -26,7 +26,7 @@ body {
     align-self: center;
     min-width: 90%;
     justify-content: center;
-    height: 100% !important;
+    height: 90% !important;
 }
 
 .navbar-brand {
@@ -460,3 +460,74 @@ form .field input[type="submit"] {
         transform: scale(0.95);
     }
 
+.form-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.form-title {
+    margin-top: 0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.form-file {
+    display: block;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+.form-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+    .form-button:hover {
+        background-color: #0056b3;
+    }
+
+.personal-page-image-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.personal-page-text-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.tab-pane {
+    margin: 20px;
+}

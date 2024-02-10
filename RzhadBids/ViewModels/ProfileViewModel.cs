@@ -7,6 +7,6 @@ namespace RzhadBids.ViewModels
     {
         public ApplicationUser User { get; set; }
         public List<Lot> Lots { get; set; } = new List<Lot>();
-
+        public List<Lot> WinnedLots { get; set;} = new List<Lot>();
     }
 }

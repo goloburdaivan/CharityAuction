@@ -3,10 +3,8 @@
     ViewBag.Title = "Upload Photo";
 }
 
-<h2 class="text-center">Upload Photo</h2>
-
-<div class="container">
-    <form method="post" action="/lot/@Model.Lot.Id/edit" enctype="multipart/form-data">
+<div class="row" id="content">
+    <form method="post" action="/lot/@Model.Lot.Id/edit" enctype="multipart/form-data" class="form-container">
         <div class="mb-3">
             <label for="title" class="form-label">Назва:</label>
             <input type="text" value="@Model.Lot.Title" id="title" name="Title" class="form-control" required>
@@ -16,7 +14,7 @@
             <textarea id="description" name="Description" class="form-control" rows="3">@Model.Lot.Description</textarea>
         </div>
         <div class="mb-3">
-            <label for="categoryId" class="form-label">ID категорії:</label>
+            <label for="categoryId" class="form-label">Категорія:</label>
             @Html.DropDownList("CategoryId", new SelectList(Model.Categories, "Id", "Title", Model.Lot.Category.Id), new { @class = "form-select", required = "required" })
         </div>
         <div class="mb-3">
@@ -31,23 +29,24 @@
         <div class="row mb-3 photos-block">
             @foreach (var photo in Model.Lot.LotPhotos)
             {
-                    <div class="col-2">
-                        <div class="position-relative d-inline-block">
-                            <img width="50" height="50" src="@photo.Url" class="mr-2 mb-2" />
-                        </div>
+                <div class="col-2">
+                    <div class="position-relative d-inline-block">
+                        <img width="50" height="50" src="@photo.Url" class="mr-2 mb-2" />
                     </div>
+                </div>
             }
         </div>
-        <button type="submit" class="btn btn-primary">Створити лот</button>
+        <button type="submit" class="form-button">Змінити</button>
         <div>
             @if (!string.IsNullOrEmpty(ViewBag.Message))
             {
-                    <div class="alert alert-success">@ViewBag.Message</div>
+                <div class="alert alert-success">@ViewBag.Message</div>
             }
             else if (!string.IsNullOrEmpty(ViewBag.Error))
             {
-                    <div class="alert alert-danger">@ViewBag.Error</div>
+                <div class="alert alert-danger">@ViewBag.Error</div>
             }
         </div>
     </form>
+</div>
 </div>
