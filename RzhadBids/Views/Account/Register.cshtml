@@ -1,36 +1,39 @@
 ﻿@model RzhadBids.ViewModels.RegisterViewModel
 
-<h2>Register</h2>
 
-<form action="/register" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Surname"></label>
-        <input asp-for="Surname" class="form-control" />
-        <span asp-validation-for="Surname" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ConfirmPassword"></label>
-        <input asp-for="ConfirmPassword" class="form-control" />
-        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Реєстрація</button>
-</form>
+ <div class="wrapper">
+	<div class="title">
+	Register Form
+	</div>
+	<form action="/register" method="post">
+	<div class="field">
+		<input type="text" required name="Name">
+		<label asp-for="Name"></label>
+		<span asp-validation-for="Name" class="text-danger"></span>
+	</div>
+	<div class="field">
+		<input type="text" required name="Surname">
+		<label asp-for="Surname"></label>
+		<span asp-validation-for="Surname" class="text-danger"></span>
+	</div>
+	<div class="field">
+		<input type="text" required name="Email">
+		<label asp-for="Email"></label>
+		<span asp-validation-for="Email" class="text-danger"></span>
+	</div>
+	<div class="field">
+		<input type="password" required name="Password">
+		<label asp-for="Password"></label>
+		<span asp-validation-for="Password" class="text-danger"></span>
+	</div>
+	<div class="field">
+		<input type="password" required name="ConfirmPassword">
+		<label asp-for="ConfirmPassword"></label>
+		<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+	</div>
+	
+	<div class="field">
+		<input type="submit" value="Register">
+	</div>
+	</form>
+</div> 

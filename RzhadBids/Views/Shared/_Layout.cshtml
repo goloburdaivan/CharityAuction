@@ -58,9 +58,7 @@
     </header>
 
     <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+         @RenderBody()
     </div>
     @await RenderSectionAsync("Scripts", required: false)
     <script src="~/js/site.js"></script>
