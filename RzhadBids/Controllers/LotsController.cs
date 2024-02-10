@@ -88,11 +88,6 @@ namespace RzhadBids.Controllers
                 return BadRequest(new { Error = "Lot not found" });
             }
 
-            if (user == null)
-            {
-                return BadRequest(new { Error = "Not logged in" });
-            }
-
             LotViewModel model = new()
             {
                 Lot = lot,

@@ -4,10 +4,27 @@
     ViewData["Title"] = "Сторінка товару";
     int minimalBid = Model.Lot.Bids.OrderByDescending(x => x.Sum).FirstOrDefault()?.Sum ?? Model.Lot.StartingPrice;
     minimalBid += 10;
-    bool isLastBid = Model.Lot.Bids.OrderBy(bid => bid.Id).LastOrDefault()?.User.Email == Model.User.Email;
+    bool isLastBid = false;
+
+    var lastBid = Model.Lot.Bids.OrderBy(bid => bid.Id).LastOrDefault();
+    if (lastBid == null)
+    {
+        isLastBid = false;
+    } else
+    {
+        isLastBid = lastBid?.User.Id == Model.User.Id;
+    }    
+
     bool isAuthenticated = User.Identity.IsAuthenticated;
     DateTime now = DateTime.UtcNow;
-    bool isCreator = Model.Lot.User.Id == Model.User.Id;
+    bool isCreator = false;
+    if (Model.User == null)
+    {
+        isCreator = false;
+    } else
+    {
+        isCreator = Model.User.Id == Model.Lot.User.Id;
+    }
 }
 <div class="loader" id="loader"></div>
 <div class="hidden" id="content">
@@ -144,66 +161,69 @@
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/auctionHub")
-            .configureLogging(signalR.LogLevel.Information)
-            .build();
+@if (Model.User != null)
+{
+    @section Scripts {
+        <script>
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/auctionHub")
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
 
-        connection.start().then(function () {
-            connection.on("ReceiveBidUpdate", function (message) {
-                $("#no-bids").remove();
-                if ($("#bids-history p").length === 0) {
-                    $("#bids-history").append("<p id='no-bids' style='color: red'>Ставок ще не зроблено! Будьте першими!</p>");
-                }
-                $("#bid-history").prepend(`<p style="color: green">${message.user.userName} - ${message.sum} грн.</p>`);
+            connection.start().then(function () {
+                connection.on("ReceiveBidUpdate", function (message) {
+                    $("#no-bids").remove();
+                    if ($("#bids-history p").length === 0) {
+                        $("#bids-history").append("<p id='no-bids' style='color: red'>Ставок ще не зроблено! Будьте першими!</p>");
+                    }
+                    $("#bid-history").prepend(`<p style="color: green">${message.user.userName} - ${message.sum} грн.</p>`);
+                });
+                connection.on("ReceiveChatUpdate", function (message) {
+                    console.log(message);
+                    const userId = "@Model.User.Id";
+                    const status = userId == message.user.id ? "sent" : "received";
+                    $("#chat-box").prepend(`
+                        <div class="message ${status}">
+                            <p>${message.text}</p>
+                        </div>  
+                    `);
+                });
+            }).catch(function (err) {
+                return console.error(err.toString());
             });
-            connection.on("ReceiveChatUpdate", function (message) {
-                console.log(message);
-                const userId = "@Model.User.Id";
-                const status = userId == message.user.id ? "sent" : "received";
-                $("#chat-box").prepend(`
-                    <div class="message ${status}">
-                        <p>${message.text}</p>
-                    </div>  
-                `);
+
+            $("#messageForm").on("submit", (event) => {
+              event.preventDefault();
+
+              const messageText = $("#message-input").val();
+              console.log(messageText);
+
+              const message = {
+                Text: messageText,
+                TimeStamp: "@DateTime.UtcNow.ToString("o")",
+                ChatId: @Model.Lot.ChatId,
+              };
+
+              if (!messageText.trim()) {
+                alert("Введіть повідомлення");
+                return;
+              }
+
+              $.ajax({
+                url: "/api/chat/sendMessage",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(message),
+                success: function (response) {
+                  console.log("Повідомлення успішно надіслано:", response);
+                  $("#message-input").val("");
+                },
+                error: function (xhr, status, error) {
+                  console.log(error);
+                  console.error("Виникла помилка:", error);
+                },
+              });
             });
-        }).catch(function (err) {
-            return console.error(err.toString());
-        });
-
-        $("#messageForm").on("submit", (event) => {
-          event.preventDefault();
-
-          const messageText = $("#message-input").val();
-          console.log(messageText);
-
-          const message = {
-            Text: messageText,
-            TimeStamp: "@DateTime.UtcNow.ToString("o")",
-            ChatId: @Model.Lot.ChatId,
-          };
-
-          if (!messageText.trim()) {
-            alert("Введіть повідомлення");
-            return;
-          }
-
-          $.ajax({
-            url: "/api/chat/sendMessage",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(message),
-            success: function (response) {
-              console.log("Повідомлення успішно надіслано:", response);
-              $("#message-input").val("");
-            },
-            error: function (xhr, status, error) {
-              console.log(error);
-              console.error("Виникла помилка:", error);
-            },
-          });
-        });
-    </script>
+        </script>
+}   
 }
