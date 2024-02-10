@@ -33,7 +33,7 @@ namespace RzhadBids.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                ModelState.AddModelError("Password", "Неправильні дані для входу");
                 return View(model);
             }
         }
@@ -73,8 +73,28 @@ namespace RzhadBids.Controllers
             }
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
+				switch (error.Code)
+				{
+					case "DuplicateUserName":
+						ModelState.AddModelError("Email", "Акаунт з такою адресою вже існує");
+						break;
+					case "PasswordRequiresDigit":
+						ModelState.AddModelError("Password", "Пароль має містити хоча б одну цифру");
+						break;
+					case "PasswordRequiresLower":
+						ModelState.AddModelError("Password", "Пароль має містити хоча б одну малу літеру");
+						break;
+					case "PasswordRequiresUpper":
+						ModelState.AddModelError("Password", "Пароль має містити хоча б одну велтку літеру");
+						break;
+					case "PasswordRequiresNonAlphanumeric":
+						ModelState.AddModelError("Password", "Пароль має містити хоча б один не буквено-цифровий символ");
+						break;
+					default:
+						ModelState.AddModelError(string.Empty, error.Description);
+						break;
+				}
+			}
             return View(model);
         }
 

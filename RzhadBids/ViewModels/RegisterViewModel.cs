@@ -6,27 +6,29 @@ namespace RzhadBids.ViewModels
     {
 
         [Required(ErrorMessage = "Please enter a name.")]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Name must be between 3 and 50 characters.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Ім'я має містити від 2 до 50 символів")]
+        [Display(Name = "Ім'я")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Please enter a surname.")]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Surname must be between 3 and 50 characters.")]
-        public string Surname { get; set; }
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Прізвище має містити від 2 до 50 символів")]
+		[Display(Name = "Прізвище")]
+		public string Surname { get; set; }
 
         [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
+        [EmailAddress(ErrorMessage = "Адреса електронної пошти не коректна")]
+        [Display(Name = "Електронна пошта")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "{0} має бути довжиною від {2} до {1} символів", MinimumLength = 8)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Пароль")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Підтвердіть пароль")]
+        [Compare("Password", ErrorMessage = "Паролі не співпадають")]
         public string ConfirmPassword { get; set; }
     }
 }
