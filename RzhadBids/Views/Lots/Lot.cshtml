@@ -68,7 +68,7 @@
                     <form action="/lot/@Model.Lot.Id" method="post">
                         <div class="form-group">
                             <label for="bidAmount">Сума ставки:</label>
-                             <input type="number" min="(@minimalBid+10)" value="(@minimalBid+10)" name="Sum" class="form-control" id="bidAmount" placeholder="Сума ставки">
+                             <input type="number" min="@(minimalBid+10)" value="@(minimalBid+10)" name="Sum" class="form-control" id="bidAmount" placeholder="Сума ставки">
                         </div>
                         <button type="submit" class="bid-button">Сделать ставку</button>
                     </form>
