@@ -5,7 +5,11 @@
     int minimalBid = Model.Lot.Bids.OrderByDescending(x => x.Sum).FirstOrDefault()?.Sum ?? Model.Lot.StartingPrice;
     bool isLastBid = Model.Lot.Bids.LastOrDefault()?.User.Id == Model.User?.Id;
     bool isAuthenticated = User.Identity.IsAuthenticated;
-    bool isCreator = Model.User?.Id == Model.Lot.User.Id;
+    bool isCreator = false;
+    if (Model.User != null)
+    {
+        isCreator = Model.User.Id == Model.Lot.User.Id;
+    }
     DateTime now = DateTime.UtcNow;
 }
 <div class="loader" id="loader"></div>

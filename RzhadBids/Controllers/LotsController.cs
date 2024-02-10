@@ -75,6 +75,7 @@ namespace RzhadBids.Controllers
                 .Include(lot => lot.Bids)
                     .ThenInclude(bid => bid.User)
                 .Include(lot => lot.Category)
+                .Include(lot => lot.User)
                 .Where(lot => lot.Id == id)
                 .FirstOrDefault();
 
