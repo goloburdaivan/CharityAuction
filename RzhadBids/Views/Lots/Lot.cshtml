@@ -46,26 +46,50 @@
                         <span><a href="/lot/@Model.Lot.Id/edit">✎</a></span>    
                     }
                 </h2>
-                <p>Категорія: @Model.Lot.Category.Title</p>
-                <p>Дата створення лоту: @Model.Lot.DateStart</p>
-                <p>Дата закінчення лоту: @Model.Lot.DateEnd</p>
-                <p>Початкова ціна: @Model.Lot.StartingPrice грн. </p>
-                <p>Найбільша ставка: @{
-                        var maxBid = Model.Lot.Bids.OrderByDescending(bid => bid.Sum).FirstOrDefault();
-                        string bidText = "";
-                        if (maxBid != null)
-                        {
-                            bidText = $"{maxBid.Sum} грн.";
-                        }
+                <table class="table">
+                    <tbody>
+                      <tr>
+                        <th scope="row">Назва:</th>
+                        <td>@Model.Lot.Title</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Категорія:</th>
+                        <td>@Model.Lot.Category.Title</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Дата створення лоту:</th>
+                        <td>@Model.Lot.DateStart</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Дата закінчення лоту:</th>
+                        <td>@Model.Lot.DateEnd</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Початкова ціна:</th>
+                        <td>@Model.Lot.StartingPrice грн.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Найбільша ставка:</th>
+                        <td>@{
+                                    var maxBid = Model.Lot.Bids.OrderByDescending(bid => bid.Sum).FirstOrDefault();
+                                    string bidText = "";
+                                    if (maxBid != null)
+                                    {
+                                        bidText = $"{maxBid.Sum} грн.";
+                                    }
 
-                        if (bidText == string.Empty)
-                        {
-                            <p style="color: red">Ставок ще не зроблено! Будьте першими!</p>
-                        } else
-                        {
-                            <p style="color: green">@bidText</p>
-                        }
-                    }</p>
+                                    if (bidText == string.Empty)
+                                    {
+                                    <p style="color: red">Ставок ще не зроблено! Будьте першими!</p>
+                                    }
+                                    else
+                                    {
+                                    <p style="color: green">@bidText</p>
+                                    }
+                                }</td>
+                      </tr>
+                    </tbody>
+                </table>
                 @if (isAuthenticated && !isLastBid && DateTime.Now <= Model.Lot.DateEnd)
                 {
                     <form action="/lot/@Model.Lot.Id" method="post">
@@ -73,18 +97,18 @@
                             <label for="bidAmount">Сума ставки:</label>
                              <input type="number" min="@(minimalBid+10)" value="@(minimalBid+10)" name="Sum" class="form-control" id="bidAmount" placeholder="Сума ставки">
                         </div>
-                        <button type="submit" class="bid-button">Сделать ставку</button>
+                        <button type="submit" class="bid-button">Зробити ставку</button>
                     </form>
                 } else
                 {
                     if (!isAuthenticated)
                     {
-                         <p style="color: red">Перед тим, як зробити ставку, вам треба 
+                         <p style="color: red; font-family: 'Permanent Marker', cursive">Ви не авторизовані!<br>Перед тим, як зробити ставку, вам треба 
                              <a href="/register">Зареєструватися</a>/<a href="/login">Увійти</a>
                          </p>
                     } else if (isLastBid && DateTime.Now <= Model.Lot.DateEnd)
                     {
-                        <p style="color: red">Ваша ставка є останньою. Слідкуйте за історією ставок!</p>
+                            <p style="color: red; font-family: 'Permanent Marker', cursive">Ваша ставка є останньою. Слідкуйте за історією ставок!</p>
                     } else if (DateTime.Now > Model.Lot.DateEnd)
                     {
                         ApplicationUser? winner = null;
@@ -93,8 +117,8 @@
                             winner = Model.Lot.Bids.OrderByDescending(bid => bid.Sum).First().User;
                         }
 
-                        <p style="color: red">Ставки на цей лот більше не приймаються!</p>
-                        <p style="color: blue">Переможець: @(winner != null ? winner.Name + " " + winner.Surname : "Ніхто не переміг")</p>
+                            <p style="color: red; font-family: 'Permanent Marker', cursive">Ставки на цей лот більше не приймаються!</p>
+                            <p style="blue: red; font-family: 'Permanent Marker', cursive">Переможець: @(winner != null ? winner.Name + " " + winner.Surname : "Ніхто не переміг")</p>
                     }
                 }
             </div>
@@ -132,7 +156,7 @@
             }
             else
             {
-                <span style="color: red">Спочатку увійдіть в акаунт</span>
+                  <span style="color: red; font-family: 'Permanent Marker', cursive">Ви не авторизовані! Спочатку увійдіть в акаунт</span>
             }
         </div>
         <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
@@ -141,12 +165,12 @@
         <div class="tab-pane fade" id="bid-history" role="tabpanel" aria-labelledby="bid-history-tab">
             @if (Model.Lot.Bids.Count == 0)
             {
-                <p id="no-bids" style="color: red">Ставок ще не зроблено! Будьте першими!</p>
+                  <p id="no-bids" style="color: red; font-family: 'Permanent Marker', cursive">Ставок ще не зроблено! Будьте першими!</p>
             } else
             {
                 @foreach (var bid in Model.Lot.Bids.OrderByDescending(x => x.Sum))
                 {
-                    <p style="color: green">@bid.User.Email - @bid.Sum грн.</p>
+                    <p style="color: green; font-family: 'Permanent Marker', cursive"><a href="/profile/@bid.User.Id">@bid.User.Name @bid.User.Surname</a> - @bid.Sum грн.</p>
                 }
             }
         </div>
