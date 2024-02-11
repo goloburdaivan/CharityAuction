@@ -85,7 +85,7 @@ namespace RzhadBids.Controllers
 						ModelState.AddModelError("Password", "Пароль має містити хоча б одну малу літеру");
 						break;
 					case "PasswordRequiresUpper":
-						ModelState.AddModelError("Password", "Пароль має містити хоча б одну велтку літеру");
+						ModelState.AddModelError("Password", "Пароль має містити хоча б одну велику літеру");
 						break;
 					case "PasswordRequiresNonAlphanumeric":
 						ModelState.AddModelError("Password", "Пароль має містити хоча б один не буквено-цифровий символ");

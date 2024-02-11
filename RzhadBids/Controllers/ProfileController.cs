@@ -26,6 +26,7 @@ namespace RzhadBids.Controllers
 
             var user = databaseContext.Users
                 .Include(user => user.Bids)
+                .ThenInclude(bid => bid.Lot)
                 .Where(user => user.Id == id).FirstOrDefault();
             var lots = databaseContext.Lots
                 .Include(lot => lot.User)
