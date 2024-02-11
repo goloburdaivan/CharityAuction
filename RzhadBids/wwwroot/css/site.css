@@ -580,3 +580,9 @@ form .field input[type="submit"] {
         width: 300px;
     }
 }
+
+.personal-page-image-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

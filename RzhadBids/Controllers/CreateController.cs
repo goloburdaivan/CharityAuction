@@ -66,7 +66,7 @@ namespace RzhadBids.Controllers
                 Title = formData.Title,
                 CategoryId = formData.CategoryId,
                 DateStart = DateTime.Now,
-                DateEnd = DateTime.UtcNow.AddDays(1),
+                DateEnd = formData.DateEnd,
                 StartingPrice = formData.StartingPrice,
                 Description = formData.Description,
                 User = currentUser,
