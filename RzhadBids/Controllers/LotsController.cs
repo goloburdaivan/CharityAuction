@@ -35,7 +35,7 @@ namespace RzhadBids.Controllers
         }
 
         [HttpGet("/lots")]
-        public IActionResult Index(int? page, bool? active, FiltersDTO filters)
+        public IActionResult Index(int? page, bool? unactive, FiltersDTO filters)
         {
             int pageNumber = page ?? 1;
             IQueryable<Lot> lots = databaseContext.Lots
@@ -43,9 +43,9 @@ namespace RzhadBids.Controllers
                 .Include(l => l.Bids)
                 .Include(u => u.User);
 
-            if (active.HasValue && active.Value)
+            if (unactive.HasValue && unactive.Value)
             {
-                lots = lots.Where(lot => lot.DateEnd > DateTime.UtcNow);
+                lots = lots.Where(lot => lot.DateEnd < DateTime.UtcNow);
             }
 
             var strategies = new List<IFilterStrategy>
