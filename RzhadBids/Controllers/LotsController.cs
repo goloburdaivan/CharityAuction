@@ -35,7 +35,7 @@ namespace RzhadBids.Controllers
         }
 
         [HttpGet("/lots")]
-        public IActionResult Index(int? page, bool? active, FiltersDTO filters)
+        public IActionResult Index(int? page, bool? unactive, FiltersDTO filters)
         {
             int pageNumber = page ?? 1;
             IQueryable<Lot> lots = databaseContext.Lots
@@ -43,9 +43,9 @@ namespace RzhadBids.Controllers
                 .Include(l => l.Bids)
                 .Include(u => u.User);
 
-            if (active.HasValue && active.Value)
+            if (unactive.HasValue && unactive.Value)
             {
-                lots = lots.Where(lot => lot.DateEnd > DateTime.UtcNow);
+                lots = lots.Where(lot => lot.DateEnd < DateTime.UtcNow);
             }
 
             var strategies = new List<IFilterStrategy>
@@ -210,7 +210,8 @@ namespace RzhadBids.Controllers
             {
                 foreach (var photo in editedLot.Photos)
                 {
-                    var stream = ThumbnailGenerator.GenerateThumbnail(photo);
+
+                    using var stream = photo.OpenReadStream();
                     await PhotoUploadService.UploadBlobAsync(photo.FileName, stream);
                     string? baseUrl = configuration["AzureBaseUrl"];
                     lot.LotPhotos.Add(new LotPhoto { LotId = lot.Id, Url = baseUrl + photo.FileName });
