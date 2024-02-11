@@ -2,6 +2,23 @@
 
 <div id="content" class="row">
     <div class="col-md-3">
+<<<<<<< HEAD:RzhadBids/Views/Photos/Upload.cshtml
+        <form method="post" action="/photos" enctype="multipart/form-data" class="form-container">
+            <h3 class="form-title">Створення лоту</h3>
+            <div class="form-group centered-label">
+                <label for="title" class="form-label">Назва:</label>
+                <br>
+                <input type="text" id="title" name="Title" class="form-input" required>
+            </div>
+            <div class="form-group centered-label">
+                <label for="description" class="form-label">Опис:</label>
+                <textarea id="description" name="Description" class="form-input"></textarea>
+            </div>
+            <div class="form-group centered-label">
+                <label for="categoryId" class="form-label">Категорія:</label>
+                <select id="categoryId" name="CategoryId" class="form-select" required>
+                    <option value="">-- Виберіть категорію --</option>
+=======
         <form method="post" action="/create" enctype="multipart/form-data" class="form-container">
     <h3 class="form-title">Створення лоту</h3>
     <div class="form-group">
@@ -16,22 +33,23 @@
         <label for="categoryId" class="form-label">Категорія:</label>
         <select id="categoryId" name="CategoryId" class="form-select" required>
             <option value="">-- Виберіть категорію --</option>
+>>>>>>> 20efe9f141fd1637181fd5c72a607f16e19e0a2d:RzhadBids/Views/Create/Upload.cshtml
                     @foreach (var category in Model.Categories)
                     {
-                            <option value="@category.Id">@category.Title</option>
+                         <option value="@category.Id">@category.Title</option>
                     }
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="startingPrice" class="form-label">Початкова ціна:</label>
-        <input type="number" id="startingPrice" name="StartingPrice" min="100" class="form-input" required>
-    </div>
-        <div class="mb-3">
-            <label for="photos" class="form-label">Фотографії:</label>
-            <input type="file" id="photos" name="Photos" class="form-control" multiple>
-        </div>
-    <button type="submit" class="form-button">Створити лот</button>
-    <div>
+                </select>
+            </div>
+            <div class="form-group centered-label">
+                <label for="startingPrice" class="form-label ">Початкова ціна:</label>
+                <input type="number" id="startingPrice" name="StartingPrice" min="100" class="form-input" required>
+            </div>
+            <div class="mb-3 centered-label" >
+                <label for="photos" class="form-label">Фотографії:</label>
+                <input type="file" id="photos" name="Photos" class="form-control" multiple>
+            </div>
+            <button type="submit" class="form-button">Створити лот</button>
+            <div>
                 @if (!string.IsNullOrEmpty(ViewBag.Message))
                 {
                     <div class="alert alert-success">@ViewBag.Message</div>
@@ -40,7 +58,7 @@
                 {
                     <div class="alert alert-danger">@ViewBag.Error</div>
                 }
+            </div>
+        </form>
     </div>
-</form>
-</div>
 </div>
