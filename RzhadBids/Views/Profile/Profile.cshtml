@@ -77,7 +77,7 @@
                     @foreach (var bid in Model.User.Bids.OrderBy(bid => bid.TimeStamp).Take(10))
                     {
                           <tr>
-                            <td scope="row">@bid.Lot.Title</td>
+                                <td scope="row"><a href="/lot/@bid.Lot.Id">@bid.Lot.Title</a></td>
                             <td>@bid.Sum</td>
                           </tr>
                     }
