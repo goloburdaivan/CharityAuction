@@ -118,7 +118,8 @@ namespace RzhadBids.Controllers
                 .Last().User
                 : null;
 
-            if (lot.Bids.OrderByDescending(bid => bid.Sum).First().Sum >= Sum)
+            var highestBid = lot.Bids.OrderByDescending(bid => bid.Sum).FirstOrDefault();
+            if (highestBid != null && highestBid.Sum >= Sum)
             {
                 return BadRequest(new { Error = "You cannot bid less then last bid" });
             }
