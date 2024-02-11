@@ -99,14 +99,11 @@ namespace RzhadBids.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpPost("/lot/{id:int}")]
         public async Task<IActionResult> CreateBid(int id, int Sum)
         {
             ApplicationUser? currentUser = await UserManager.GetUserAsync(User);
-            if (currentUser == null)
-            {
-                return BadRequest(new { Error = "You need to login before sending smth." });
-            }
 
             var lot = databaseContext.Lots
              .Where(lot => lot.Id == id)
@@ -120,6 +117,11 @@ namespace RzhadBids.Controllers
                 .OrderBy(bid => bid.Id)
                 .Last().User
                 : null;
+
+            if (lot.Bids.OrderByDescending(bid => bid.Sum).First().Sum >= Sum)
+            {
+                return BadRequest(new { Error = "You cannot bid less then last bid" });
+            }
 
             if (lastBidUser != null && lastBidUser.Id == currentUser.Id)
             {
