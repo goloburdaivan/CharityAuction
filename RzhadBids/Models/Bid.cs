@@ -1,4 +1,5 @@
 ﻿using RzhadBids.Auth;
+using System.Text.Json.Serialization;
 
 namespace RzhadBids.Models
 {

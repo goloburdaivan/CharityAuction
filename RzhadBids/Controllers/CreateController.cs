@@ -9,16 +9,16 @@ using RzhadBids.ViewModels;
 namespace RzhadBids.Controllers
 {
 
-    [Route("/photos")]
+    [Route("/create")]
     [Authorize]
-    public class PhotosController : BaseController
+    public class CreateController : BaseController
     {
         readonly IPhotoUploadService photoStorageService;
         readonly IConfiguration configuration;
 
         [FromServices]
         public ThumbnailGenerator ThumbnailGenerator { get; set; }
-        public PhotosController(IPhotoUploadService photoStorageService,
+        public CreateController(IPhotoUploadService photoStorageService,
             IConfiguration configuration, DatabaseContext databaseContext) : base(databaseContext)
         {
             this.photoStorageService = photoStorageService;
@@ -39,10 +39,16 @@ namespace RzhadBids.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(LotDTO formData)
         {
+
+            var categoriesModel = new LotCreateViewModel
+            {
+                Categories = databaseContext.Categories
+            };
+
             if (formData.Photos.IsNullOrEmpty())
             {
                 ViewBag.Error = "Файл не обрано.";
-                return View();
+                return View(categoriesModel);
             }
 
             var currentUser = await UserManager.GetUserAsync(User);
@@ -87,11 +93,6 @@ namespace RzhadBids.Controllers
             {
                 ViewBag.Error = "Виникла помилка при завантаженні файлу: " + ex.Message;
             }
-
-            var categoriesModel = new LotCreateViewModel
-            {
-                Categories = databaseContext.Categories
-            };
 
             return View(categoriesModel);
         }

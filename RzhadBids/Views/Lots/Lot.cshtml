@@ -10,7 +10,6 @@
     {
         isCreator = Model.User.Id == Model.Lot.User.Id;
     }
-    DateTime now = DateTime.UtcNow;
 }
 <div class="loader" id="loader"></div>
 <div class="hidden" id="content">
@@ -67,7 +66,7 @@
                             <p style="color: green">@bidText</p>
                         }
                     }</p>
-                @if (isAuthenticated && !isLastBid && now <= Model.Lot.DateEnd)
+                @if (isAuthenticated && !isLastBid && DateTime.Now <= Model.Lot.DateEnd)
                 {
                     <form action="/lot/@Model.Lot.Id" method="post">
                         <div class="form-group">
@@ -83,15 +82,15 @@
                          <p style="color: red">Перед тим, як зробити ставку, вам треба 
                              <a href="/register">Зареєструватися</a>/<a href="/login">Увійти</a>
                          </p>
-                    } else if (isLastBid && now <= Model.Lot.DateEnd)
+                    } else if (isLastBid && DateTime.Now <= Model.Lot.DateEnd)
                     {
                         <p style="color: red">Ваша ставка є останньою. Слідкуйте за історією ставок!</p>
-                    } else if (now > Model.Lot.DateEnd)
+                    } else if (DateTime.Now > Model.Lot.DateEnd)
                     {
                         ApplicationUser? winner = null;
                         if (Model.Lot.Bids.Count != 0)
                         {
-                            winner = Model.Lot.Bids.OrderByDescending(bid => bid.Sum).Last().User;
+                            winner = Model.Lot.Bids.OrderByDescending(bid => bid.Sum).First().User;
                         }
 
                         <p style="color: red">Ставки на цей лот більше не приймаються!</p>

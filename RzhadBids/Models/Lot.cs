@@ -1,4 +1,5 @@
 ﻿using RzhadBids.Auth;
+using System.Text.Json.Serialization;
 
 namespace RzhadBids.Models
 {
@@ -16,6 +17,7 @@ namespace RzhadBids.Models
         public Chat? Chat { get; set; }
         public Category Category { get; set; }
         public List<LotPhoto> LotPhotos { get; set; } = new List<LotPhoto>();
+        [JsonIgnore]
         public List<Bid> Bids { get; set; } = new List<Bid>();
     }
 }

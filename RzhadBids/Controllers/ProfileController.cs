@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RzhadBids.Models;
@@ -16,9 +15,10 @@ namespace RzhadBids.Controllers
         }
 
         [HttpGet("/profile")]
-        public IActionResult Index()
+        public async Task<IActionResult> MyProfile()
         {
-            return View();
+            var user = await UserManager.GetUserAsync(User);
+            return Redirect($"/profile/{user.Id}");
         }
         [HttpGet("/profile/{id}")]
         public IActionResult Profile(string id)
