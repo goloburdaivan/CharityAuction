@@ -586,3 +586,11 @@ form .field input[type="submit"] {
     justify-content: center;
     align-items: center;
 }
+
+#bid-history {
+    text-align: center;
+}
+
+#description {
+    text-align: center;
+}

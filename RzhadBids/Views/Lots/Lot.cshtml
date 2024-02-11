@@ -146,10 +146,7 @@
                         {
                             <div class="message @(message.User.Id == Model.User.Id ? "sent" : "received")">
                                 <p style="font-size: 16px; margin-bottom: 3px;">@message.TimeStamp.AddHours(2).ToString("HH:mm")</p>
-                                   @if (message.User.Id != Model.User.Id)
-                                        {
-                                            <p style="font-size: 15px; margin-bottom: 3px;">@message.User.Name @message.User.Surname: </p>
-                                        }
+                                <p style="font-size: 15px; margin-bottom: 3px;">@message.User.Name @message.User.Surname: </p>
                                 <p style="font-size: 16px; margin-bottom: 5px;">@message.Text</p>
                             </div>
                         }
@@ -205,8 +202,10 @@
                     console.log(message);
                     const userId = "@Model.User.Id";
                     const status = userId == message.user.id ? "sent" : "received";
-                    $("#chat-box").prepend(`
+                    $("#chat-box").append(`
                         <div class="message ${status}">
+                            <p style="font-size: 16px; margin-bottom: 3px;">${message.timeStamp.split('T')[1].slice(0, 5)}</p>
+                            <p style="font-size: 15px; margin-bottom: 3px;">${message.user.name} ${message.user.surname}: </p>
                             <p>${message.text}</p>
                         </div>  
                     `);
