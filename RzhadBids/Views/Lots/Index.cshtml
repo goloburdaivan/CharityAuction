@@ -101,8 +101,18 @@
         @if (Model.PageCount > 1)
         {
                 <div class="pagedList">
-                @Html.PagedListPager(Model, page => Url.Action("Index", "Lots",
-                new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                @Html.PagedListPager(Model, page => Url.Action("Index", "Lots", new { page, 
+                    FilterCategories = ViewBag.Filters.FilterCategories,
+                    MinPrice = ViewBag.Filters.MinPrice, 
+                    MaxPrice = ViewBag.Filters.MaxPrice, 
+                    StartDate = ViewBag.Filters.StartDate, 
+                    EndDate = ViewBag.Filters.EndDate,
+                    Actual = ViewBag.Filters.Actual,
+                    Unactual = ViewBag.Filters.Unactual,
+                    MaxBids = ViewBag.Filters.MaxBids,
+                    SortDesc = ViewBag.Filters.SortDesc,
+                    SortAsc = ViewBag.Filters.SortAsc
+                }))
                 </div>    
         }
     </div>
