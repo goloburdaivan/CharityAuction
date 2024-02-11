@@ -210,7 +210,8 @@ namespace RzhadBids.Controllers
             {
                 foreach (var photo in editedLot.Photos)
                 {
-                    var stream = ThumbnailGenerator.GenerateThumbnail(photo);
+
+                    using var stream = photo.OpenReadStream();
                     await PhotoUploadService.UploadBlobAsync(photo.FileName, stream);
                     string? baseUrl = configuration["AzureBaseUrl"];
                     lot.LotPhotos.Add(new LotPhoto { LotId = lot.Id, Url = baseUrl + photo.FileName });
