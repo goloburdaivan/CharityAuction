@@ -172,10 +172,23 @@
                   <p id="no-bids" style="color: red; font-family: 'Permanent Marker', cursive">Ставок ще не зроблено! Будьте першими!</p>
             } else
             {
-                @foreach (var bid in Model.Lot.Bids.OrderByDescending(x => x.Sum))
-                {
-                    <p style="color: green; font-family: 'Permanent Marker', cursive"><a href="/profile/@bid.User.Id">@bid.User.Name @bid.User.Surname</a> - @bid.Sum грн.</p>
-                }
+                        <table class="table" style="color: green; font-family: 'Permanent Marker', cursive">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Ім'я</th>
+                                <th>Ставка</th>
+                                <th>Час</th>
+                            </tr>
+                        @foreach (var bid in Model.Lot.Bids.OrderByDescending(x => x.Sum))
+                        {
+                            <tr>
+                                <td scope="row"><a href="/profile/@bid.User.Id">@bid.User.Name @bid.User.Surname</a></td>
+                                <td>@bid.Sum грн.</td>
+                                <td>@bid.TimeStamp</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
             }
         </div>
     </div>

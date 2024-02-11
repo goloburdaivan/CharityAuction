@@ -12,7 +12,7 @@
        <table class="table">
         <tbody>
           <tr>
-            <th scope="row">Ім'я':</th>
+            <th scope="row">Ім'я:</th>
             <td>@Model.User.Name</td>
           </tr>
           <tr>
@@ -67,10 +67,21 @@
                 }
     </div>
     <div class="tab-pane fade" id="bid-history" role="tabpanel" aria-labelledby="bid-history-tab">
-                @foreach (var bid in Model.User.Bids.OrderBy(bid => bid.TimeStamp).Take(10))
-                {
-                      <p><a href="/lot/@bid.Lot.Id">@bid.Lot.Title</a> - @bid.Sum</p>
-                }
+                <table class="table" style="color: green; font-family: 'Permanent Marker', cursive">
+                    <tbody>
+                      <tr>
+                        <th scope="row">Лот</th>
+                        <th>Ставка</th>
+                      </tr>
+                    </tbody>
+                    @foreach (var bid in Model.User.Bids.OrderBy(bid => bid.TimeStamp).Take(10))
+                    {
+                          <tr>
+                            <td scope="row">@bid.Lot.Title</td>
+                            <td>@bid.Sum</td>
+                          </tr>
+                    }
+                </table>
     </div>
   </div>
   </div>
