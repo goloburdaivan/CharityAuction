@@ -10,5 +10,7 @@
         public string? Actual { get; set; }
         public string? Unactual { get; set; }
         public string? MaxBids { get; set; }
+        public string? SortDesc { get; set; }
+        public string? SortAsc {  get; set; }
     }
 }

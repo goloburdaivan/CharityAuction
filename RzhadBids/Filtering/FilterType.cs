@@ -5,6 +5,7 @@
         Category,
         Price,
         Date,
-        Activity
+        Activity,
+        SortPrice
     }
 }

@@ -53,7 +53,8 @@ namespace RzhadBids.Controllers
                 FilterStrategyFactory.GetFilterStrategy(FilterType.Category),
                 FilterStrategyFactory.GetFilterStrategy(FilterType.Date),
                 FilterStrategyFactory.GetFilterStrategy(FilterType.Price),
-                FilterStrategyFactory.GetFilterStrategy(FilterType.Activity)
+                FilterStrategyFactory.GetFilterStrategy(FilterType.Activity),
+                FilterStrategyFactory.GetFilterStrategy(FilterType.SortPrice)
             };
 
             foreach (var strategy in strategies)

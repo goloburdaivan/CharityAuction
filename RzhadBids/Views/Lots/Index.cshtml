@@ -36,6 +36,14 @@
                     <input type="number" name="MinPrice" class="form-control" placeholder="Мінімальна ціна" value="@ViewBag.Filters?.MinPrice">
                     <input type="number" name="MaxPrice" class="form-control" placeholder="Максимальна ціна" value="@ViewBag.Filters?.MaxPrice">
                 </div>
+                 <div class="form-check">
+                     <input class="form-check-input" type="checkbox" name="SortDesc" @(ViewBag.Filters?.SortDesc != null ? "checked" : "")>
+                     <label class="form-check-label" for="active">Від найдорожчих</label>
+                </div>
+                <div class="form-check">
+                     <input class="form-check-input" type="checkbox" name="SortAsc" @(ViewBag.Filters?.SortAsc != null ? "checked" : "")>
+                     <label class="form-check-label" for="active">Від найдешевших</label>
+                </div>
                 <hr>
                 <div class="mb-3">
                     <label>Дата:</label>
