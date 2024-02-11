@@ -73,7 +73,7 @@
                             <label for="bidAmount">Сума ставки:</label>
                              <input type="number" min="@(minimalBid+10)" value="@(minimalBid+10)" name="Sum" class="form-control" id="bidAmount" placeholder="Сума ставки">
                         </div>
-                        <button type="submit" class="bid-button">Сделать ставку</button>
+                        <button type="submit" class="bid-button">Зробити ставку</button>
                     </form>
                 } else
                 {
@@ -100,35 +100,42 @@
             </div>
         </div>
     </div>
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="true">Чат</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="false">Опис</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="bid-history-tab" data-toggle="tab" href="#bid-history" role="tab" aria-controls="bid-history" aria-selected="false">Історія ставок</a>
-        </li>
-    </ul>
+    <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="true">Чат</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="false">Опис</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="bid-history-tab" data-toggle="tab" href="#bid-history" role="tab" aria-controls="bid-history" aria-selected="false">Історія ставок</a>
+    </li>
+</ul>
+
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
             @if (User.Identity.IsAuthenticated)
             {
-                  <div class="chat-container">
-                    <div class="chat-box" id="chat-box">
-                            @foreach (var message in Model.Messages)
-                            {
-                                           <div class="message @(message.User.Id == Model.User.Id ? "sent" : "received")">
-                                              <p>@message.Text</p>
-                                           </div>
-                            }
-                    </div>
-                    <form id="messageForm">
-                        <input type="text" id="message-input" placeholder="Введіть повідомлення...">
-                        <input type="submit" id="send-button" value="Надіслати" />
-                    </form>
-                  </div>   
+                <div class="chat-container">
+                <div class="chat-box" id="chat-box">
+                        @foreach (var message in Model.Messages)
+                        {
+                            <div class="message @(message.User.Id == Model.User.Id ? "sent" : "received")">
+                                <p style="font-size: 16px; margin-bottom: 3px;">@message.TimeStamp.AddHours(2).ToString("HH:mm")</p>
+                                   @if (message.User.Id != Model.User.Id)
+                                        {
+                                            <p style="font-size: 15px; margin-bottom: 3px;">@message.User.Name @message.User.Surname: </p>
+                                        }
+                                <p style="font-size: 16px; margin-bottom: 5px;">@message.Text</p>
+                            </div>
+                        }
+
+                </div>
+                <form id="messageForm">
+                    <input type="text" id="message-input" placeholder="Введіть повідомлення...">
+                    <input type="submit" id="send-button" value="Надіслати" />
+                </form>
+                </div>   
             }
             else
             {

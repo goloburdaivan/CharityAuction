@@ -251,7 +251,7 @@ body {
     }
 
 .chat-container {
-    max-width: 350px;
+    max-width: 360px;
     margin: 20px auto;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -266,7 +266,7 @@ body {
 
 .message {
     margin-bottom: 5px;
-    padding: 5px 8px;
+    padding: 2px 8px;
     border-radius: 3px;
     font-size: 14px;
 }
@@ -278,13 +278,41 @@ body {
     word-wrap: break-word;
 }
 
+
 .sent {
     width: 50%;
     background-color: #0084ff;
     height: auto;
     word-wrap: break-word;
     color: #fff;
+    margin-left: 50%;
 }
+    .sent p {
+        text-align: right;
+    }
+
+#message-input {
+    width: 95%;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 2.5%;
+}
+
+#send-button {
+    display: inline-block;
+    vertical-align: middle;
+    display: block;
+    width: 95%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #0084ff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 2.5%;
+}
+
 
 input[type="text"] {
    /* width: calc(100% - 80px);*/
