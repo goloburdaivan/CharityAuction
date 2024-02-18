@@ -15,7 +15,7 @@ namespace RzhadBids.Controllers
     public class LotsController : BaseController
     {
 
-        const int PageSize = 21;
+        const int PageSize = 9;
         private readonly IHubContext<AuctionHub> hubContext;
 
         [FromServices]
@@ -65,7 +65,7 @@ namespace RzhadBids.Controllers
             ViewBag.Categories = databaseContext.Categories.ToList();
             ViewBag.Filters = filters;
 
-            return View(lots.ToPagedList());
+            return View(lots.ToPagedList(pageNumber, PageSize));
         }
 
         [HttpGet("/lot/{id:int}")]
